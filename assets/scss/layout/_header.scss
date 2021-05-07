@@ -10,4 +10,17 @@ nav {
     }
   }
 
+  .badge {
+    border-radius: 50px;
+    right: -15px;
+    top: 0;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    color: black;
+    position: absolute;
+  }
 }
