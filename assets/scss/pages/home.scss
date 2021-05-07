@@ -1,1 +1,56 @@
 @import "../main.scss";
+
+#product-list {
+  .filter {
+    padding-left: 0;
+  }
+
+  article {
+    margin-bottom: 45px;
+
+    h3 {
+      margin-top: 15px;
+      @include font-size(1.3rem);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    p {
+      @include font-size(0.925rem);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+
+      &.product-price {
+        text-align: right;
+      }
+    }
+
+    .product-action {
+
+      .btn {
+        padding: 15px;
+        width: 48%;
+
+        &-buy:hover {
+          color: white;
+          background-color: green;
+          border-color: green;
+        }
+
+        &-view:hover {
+          color: white;
+          background-color: blue;
+          border-color: blue;
+        }
+      }
+
+      i {
+        @include font-size(1.5rem);
+      }
+    }
+  }
+}

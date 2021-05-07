@@ -4,3 +4,25 @@
 .bg-orinoco {
   background-color: #F4E9F1;
 }
+
+h1, h2, h3, h4, h5 {
+  font-family: $primaryFont;
+}
+
+p {
+  font-family: $secondaryFont;
+}
+
+section {
+  margin-top: 50px;
+}
+
+.btn-orinoco {
+  font-family: $primaryFont;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: 1px solid black;
+  border-radius: 0;
+  padding: 15px 25px;
+  margin-bottom: 10px;
+}

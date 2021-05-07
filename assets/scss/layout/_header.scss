@@ -1,4 +1,6 @@
 nav {
+  font-family: $primaryFont;
+
   a {
     cursor: pointer;
     @include font-size(1.3rem);
