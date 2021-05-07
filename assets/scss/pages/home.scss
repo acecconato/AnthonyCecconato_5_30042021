@@ -3,6 +3,10 @@
 #product-list {
   .filter {
     padding-left: 0;
+
+    li {
+      margin: 10px 15px;
+    }
   }
 
   article {
