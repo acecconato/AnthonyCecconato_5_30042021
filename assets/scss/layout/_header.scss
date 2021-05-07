@@ -1,0 +1,11 @@
+nav {
+  a {
+    cursor: pointer;
+    @include font-size(1.3rem);
+
+    i {
+      @include font-size(2rem);
+    }
+  }
+
+}
