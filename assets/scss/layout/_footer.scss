@@ -1,0 +1,14 @@
+@include media-breakpoint-up('lg') {
+  footer {
+    .nav-link {
+      display: inline-block;
+    }
+
+    li:not(:last-child)::after {
+      content: '|';
+      display: inline-block;
+      margin-left: 10px;
+      font-weight: lighter;
+    }
+  }
+}
