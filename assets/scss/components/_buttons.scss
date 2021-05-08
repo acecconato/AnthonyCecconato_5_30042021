@@ -1,0 +1,33 @@
+.btn-orinoco {
+  font-family: $primaryFont;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: 1px solid black;
+  border-radius: 0;
+  padding: 15px 25px;
+  margin-bottom: 10px;
+}
+
+.product-action {
+
+  .btn {
+    padding: 15px;
+    width: 48%;
+
+    &-buy:hover {
+      color: white;
+      background-color: green;
+      border-color: green;
+    }
+
+    &-view:hover {
+      color: white;
+      background-color: blue;
+      border-color: blue;
+    }
+  }
+
+  i {
+    @include font-size(1.5rem);
+  }
+}

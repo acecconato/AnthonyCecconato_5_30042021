@@ -1,1 +1,36 @@
 @import "../main.scss";
+
+#product-list {
+  .filter {
+    padding-left: 0;
+
+    li {
+      margin: 10px 15px;
+    }
+  }
+
+  article {
+    margin-bottom: 45px;
+
+    h3 {
+      margin-top: 15px;
+      @include font-size(1.3rem);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    p {
+      @include font-size(0.925rem);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+
+      &.product-price {
+        text-align: right;
+      }
+    }
+  }
+}

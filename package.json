@@ -18,10 +18,15 @@
     "url": "https://github.com/acecconato/AnthonyCecconato_5_30042021/issues"
   },
   "homepage": "https://github.com/acecconato/AnthonyCecconato_5_30042021#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.0",
+    "bootstrap-icons": "^1.4.1"
+  },
   "devDependencies": {
     "autoprefixer": "^10.2.5",
     "css-loader": "^5.2.4",
+    "file-loader": "^6.2.0",
     "mini-css-extract-plugin": "^1.6.0",
     "node-sass": "^5.0.0",
     "postcss": "^8.2.13",
