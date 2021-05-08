@@ -1,1 +1,53 @@
 @import "../main.scss";
+
+#single-product {
+
+  .product-price {
+    position: absolute;
+    top: 13%;
+    right: -110px;
+    width: 100px;
+    padding: 15px 0;
+    border: 1px solid black;
+    border-right: none;
+    background-color: #f8f9fa;
+    text-align: center;
+    box-shadow: -2px 1px 2px grey;
+    font-family: $primaryFont;
+    @include font-size(1.3rem);
+
+    transform: translateX(-120px);
+    transition: transform 0.4s 0.2s ease-out;
+  }
+
+  .product-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+  }
+}
+
+fieldset {
+  margin-top: 50px;
+  border: 1px solid black;
+  padding: 10px;
+
+  legend {
+    @include font-size(1.2rem);
+    position: absolute;
+    top: -25px;
+    width: fit-content;
+    padding: 0 25px;
+    display: block;
+    background-color: #f8f9fa;
+  }
+}
+
+@include media-breakpoint-up('md') {
+  #single-product {
+    .product-image {
+      width: 100%;
+      max-height: 500px;
+    }
+  }
+}
