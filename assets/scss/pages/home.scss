@@ -32,29 +32,5 @@
         text-align: right;
       }
     }
-
-    .product-action {
-
-      .btn {
-        padding: 15px;
-        width: 48%;
-
-        &-buy:hover {
-          color: white;
-          background-color: green;
-          border-color: green;
-        }
-
-        &-view:hover {
-          color: white;
-          background-color: blue;
-          border-color: blue;
-        }
-      }
-
-      i {
-        @include font-size(1.5rem);
-      }
-    }
   }
 }
