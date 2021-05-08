@@ -3,6 +3,8 @@ assets/dist/
 # Created by https://www.toptal.com/developers/gitignore/api/node,vscode,phpstorm,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,vscode,phpstorm,macos
 
+.idea/
+
 ### macOS ###
 # General
 .DS_Store
