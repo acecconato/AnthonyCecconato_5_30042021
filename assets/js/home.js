@@ -16,7 +16,7 @@ async function loadObjectsFromApi(type) {
     return response.json();
 }
 
-function prepareProduct(product) {
+function renderHTMLProduct(product) {
     products.push(`
         <article data-id="${product._id}" class="col-8 col-md-6 col-xl-3 d-flex flex-column justify-content-between mx-auto mx-lg-0">
             <img src="${product.imageUrl}" alt="">
@@ -36,7 +36,7 @@ function prepareProduct(product) {
     `);
 }
 
-function toggleLoading(element) {
+function renderHTMLLoading(element) {
     element.innerHTML += `
         <div class="spinner">
             <div class="bounce1"></div>
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         products = [];
 
         /* Toggle loading animation */
-        toggleLoading(productListItemsElement);
+        renderHTMLLoading(productListItemsElement);
 
         /* Get products from the API filtered by the desired type */
         const type = e.target.getAttribute('data-type');
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const objects = await loadObjectsFromApi(type);
 
             objects.forEach((product) => {
-                prepareProduct(product);
+                products.push(renderHTMLProduct(product));
             });
 
             /* Timeout is only for demo purposes */
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     productListItemsElement.innerHTML = `<p class="alert alert-warning">Aucun produit trouvé</p>`
                 }
-            }, 1500)
+            }, 300)
         } catch (e) {
             productListItemsElement.innerHTML = `<p class="alert alert-danger">Une erreur est survenue lors de la récupération des produits</p>`
         }
