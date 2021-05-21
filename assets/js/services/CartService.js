@@ -20,6 +20,7 @@ export default class CartService {
         } else {
 
             this.cart[item.identifier] = item;
+            this.updateCartCount();
         }
 
         this.persistCart();
@@ -27,12 +28,16 @@ export default class CartService {
 
     removeFromCart(identifier) {
         delete this.cart[identifier];
+
+        this.updateCartCount();
         this.persistCart();
     }
 
     clearCart() {
         this.cart = {};
         localStorage.removeItem('cart');
+
+        document.getElementById('cart-count').innerText = '0';
 
         this.persistCart();
     }
@@ -43,6 +48,10 @@ export default class CartService {
 
     generateIdentifierFromString(str) {
         return str.toLowerCase().replace(/\s/g, '');
+    }
+
+    updateCartCount() {
+        document.getElementById('cart-count').innerText = Object.keys(this.cart).length.toString();
     }
 
     persistCart() {

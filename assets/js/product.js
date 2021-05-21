@@ -1,3 +1,5 @@
+import {Modal} from "bootstrap";
+
 import config from "./config/config.js";
 import {loadObjectByIdAndType} from "./services/api";
 import CartService from "./services/CartService";
@@ -94,6 +96,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         let product = await loadObjectByIdAndType(idProduct, type);
         product.option_key = await getCustomizationOptionsByType(type);
+
+        document.title = product.name + ' - Vendu par Orinoco';
+        document.querySelector('meta[name="description"]').setAttribute("content", product.description);
 
         product.options = [];
         product[product.option_key].forEach((option) => {
