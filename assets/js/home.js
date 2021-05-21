@@ -1,23 +1,10 @@
 import config from './config/config.js';
+import {loadObjectsFromApi} from "./services/api";
 
 let products = [];
 
-async function loadObjectsFromApi(type) {
-    const response = await fetch(
-        config.apiUrl + '/' + type,
-        {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'}
-        }
-    ).catch((e) => {
-        console.error(e);
-    });
-
-    return response.json();
-}
-
 function renderHTMLProduct(product, type) {
-    products.push(`
+    return `
         <article data-id="${product._id}" class="col-8 col-md-6 col-xl-3 d-flex flex-column justify-content-between mx-auto mx-lg-0">
             <img src="${product.imageUrl}" alt="">
             <h3>${product.name}</h3>
@@ -32,7 +19,7 @@ function renderHTMLProduct(product, type) {
                 </a>
             </div>
         </article>
-    `);
+    `;
 }
 
 function renderHTMLLoading(element) {
