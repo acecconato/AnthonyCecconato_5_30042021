@@ -20,3 +20,15 @@ section {
 .text-right {
   text-align: right;
 }
+
+.toast-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.toast {
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}

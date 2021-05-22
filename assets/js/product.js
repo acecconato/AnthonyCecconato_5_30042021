@@ -1,8 +1,9 @@
-import {Modal} from "bootstrap";
+import {Tooltip, Toast, Popover} from "bootstrap";
 
 import config from "./config/config.js";
 import {loadObjectByIdAndType} from "./services/api";
 import CartService from "./services/CartService";
+import {renderAddToCartNotification} from "./helpers/notifications";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -48,7 +49,7 @@ function renderHTMLSingleProduct(product) {
 
                         <div class="row mb-3 align-items-center">
                             <label class="col-3 form-label" for="quantity">Quantité</label>
-                            <div class="col-2">
+                            <div class="col-3">
                                 <input type="number" class="form-control" name="quantity" id="quantity" value="1" required>
                             </div>
                         </div>
@@ -75,7 +76,7 @@ function handleSubmit(e, product) {
     let cartService = new CartService();
     cartService.addToCart(product);
 
-    // this.submit();
+    renderAddToCartNotification();
 }
 
 async function getCustomizationOptionsByType(type) {
