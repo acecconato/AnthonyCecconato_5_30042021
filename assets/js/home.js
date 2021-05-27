@@ -1,23 +1,10 @@
 import config from './config/config.js';
+import {loadObjectsFromApi} from "./services/api";
 
 let products = [];
 
-async function loadObjectsFromApi(type) {
-    const response = await fetch(
-        config.apiUrl + '/' + type,
-        {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'}
-        }
-    ).catch((e) => {
-        console.error(e);
-    });
-
-    return response.json();
-}
-
-function renderHTMLProduct(product) {
-    products.push(`
+function renderHTMLProduct(product, type) {
+    return `
         <article data-id="${product._id}" class="col-8 col-md-6 col-xl-3 d-flex flex-column justify-content-between mx-auto mx-lg-0">
             <img src="${product.imageUrl}" alt="">
             <h3>${product.name}</h3>
@@ -25,15 +12,14 @@ function renderHTMLProduct(product) {
             <p class="product-price">${product.price}€</p>
 
             <div class="product-action">
-                <a href="#" class="btn btn-orinoco btn-buy" aria-label="Acheter">
+                <a href="//${config.basePath}/pages/product.html?id=${product._id}&type=${type}" 
+                class="btn btn-orinoco btn-buy" 
+                aria-label="Acheter">
                     <i class="bi bi-cart-plus-fill"></i>
-                </a>
-                <a href="#" class="btn btn-orinoco btn-view" aria-label="Voir le produit">
-                    <i class="bi bi-eye"></i>
                 </a>
             </div>
         </article>
-    `);
+    `;
 }
 
 function renderHTMLLoading(element) {
@@ -68,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const objects = await loadObjectsFromApi(type);
 
             objects.forEach((product) => {
-                products.push(renderHTMLProduct(product));
+                products.push(renderHTMLProduct(product, type));
             });
 
             /* Timeout is only for demo purposes */
@@ -81,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }, 300)
         } catch (e) {
+            console.error(e);
             productListItemsElement.innerHTML = `<p class="alert alert-danger">Une erreur est survenue lors de la récupération des produits</p>`
         }
     })
