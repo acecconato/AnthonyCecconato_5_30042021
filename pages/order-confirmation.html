@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Merci pour votre achat !</title>
+    <meta name="description"
+          content="Orinoco est une boutique en ligne qui se démarque des grands site e-commerce en créant des applications thématiques ne vendant qu’un seul groupe de produits. Il y a par exemple Oribook pour les livres ou Oritextil pour les vêtements.">
+
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" href="./../assets/dist/css/confirmation.css">
+
+    <script src="./../assets/dist/js/confirmation.js" defer></script>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-md navbar-light bg-orinoco">
+        <div class="container d-flex justify-content-center">
+
+            <div class="navbar-brand text-center me-auto" aria-hidden="true">
+                <img src="./../assets/img/logo.jpg" alt="Logo d'Orinoco" height="75">
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Ouvrir/fermer la navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./../index.html">Accueil</a>
+                    </li>
+                    <li class="nav-item" tabindex="0">
+                        <a class="nav-link">Nos produits</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" tabindex="0" aria-label="Mon profil">
+                            <span class="d-md-none">Mon profil</span>
+                            <i class="d-none d-md-inline bi bi-person-circle" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" tabindex="0" aria-label="Mon panier">
+                            <span class="d-md-none">Mon panier</span>
+                            <i class="d-none d-md-inline bi bi-cart" aria-hidden="true"></i>
+                            <span id="cart-count" class="badge">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section id="confirmation" class="confirmation">
+        <div class="container bg-light p-5 mt-5">
+            <h1>Commande effectuée avec succès</h1>
+            <p>Merci pour votre achat ! Votre commande sera traitée le rapidement possible.</p>
+
+            <p class="confirmation-info">Total TTC : <b>15€</b></p>
+            <p class="confirmation-info">Référence de la commande : <b>AZD67f68ez7</b></p>
+
+            <p class="mt-5 row gap-2">
+
+                <a href="#" class="col-12 col-xxl-4 btn btn-orinoco">
+                    <i class="bi bi-download"></i>
+                    Télécharger ma facture
+                </a>
+
+                <a href="./../index.html" class="col-12 col-xxl-4 btn btn-orinoco">
+                    <i class="bi bi-arrow-left-circle"></i>
+                    Retourner sur la page d'accueil
+                </a>
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer class="py-5">
+    <div class="container d-lg-flex flex-row justify-content-between">
+        <p>Orinoco, tous droit réservés</p>
+        <ul class="navbar-nav d-flex flex-lg-row gap-2 align-items-lg-center">
+            <li class="nav-item"><a class="nav-link" href="#">Mentions légales</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Politique de confidentialité</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">CGV</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">CGU</a></li>
+        </ul>
+    </div>
+</footer>
+
+</body>
+</html>
