@@ -188,7 +188,7 @@
 
                 </section>
 
-                <aside class="col-12 col-md-4 divided-right p-3">
+                <aside class="col-12 col-md-4 divided-right mt-5 mt-md-0">
                     <div class="cart-summary bg-orinoco p-3">
                         <h2>Résumé</h2>
                         <hr>
@@ -200,11 +200,44 @@
                             <li class="list-group-item d-flex justify-content-between">Code promo <span>Aucun</span></li>
                         </ul>
 
-                        <a class="btn btn-primary mt-5 mb-3 mx-auto d-block" href="#">Procéder au paiement</a>
-
                         <div class="cart-logo text-center">
                             <img class="img-fluid" src="./../assets/img/logo.jpg" alt="">
                         </div>
+                    </div>
+
+                    <div class="cart-checkout bg-orinoco">
+                        <form class="cart-form mt-5 mb-3 p-3 pb-5" action="#">
+                            <h3 class="h5">Finalisez votre commande</h3>
+
+                            <label class="form-label" for="firstname">Nom</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="firstname" id="firstname" required>
+                            </div>
+
+                            <label class="form-label" for="lastname">Prénom</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="lastname" id="lastname" required>
+                            </div>
+
+                            <label class="form-label" for="address">Adresse</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="address" id="address" required>
+                            </div>
+
+                            <label class="form-label" for="city">Ville</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="city" id="city" required>
+                            </div>
+
+                            <label class="form-label" for="email">Adresse mail</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="email" id="email" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mt-5 mx-auto d-block">
+                                Procéder au paiement
+                            </button>
+                        </form>
                     </div>
                 </aside>
 
