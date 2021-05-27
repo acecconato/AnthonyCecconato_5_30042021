@@ -33,6 +33,23 @@ export default class CartService {
         this.persistCart();
     }
 
+    getAll() {
+        return this.cart;
+    }
+
+    getSummary() {
+        const prices = Object.values(this.cart).map(item => item.price);
+
+        return {
+            nbItems: Object.keys(this.cart).length,
+            delivery: 'Gratuite',
+            totalTTC: prices.reduce((a, b) => a + b, 0),
+            totalWT: prices.reduce((a, b) => a + b, 0) * 0.80,
+            vat: '20%',
+            promoCode: 'Aucun'
+        };
+    }
+
     clearCart() {
         this.cart = {};
         localStorage.removeItem('cart');
