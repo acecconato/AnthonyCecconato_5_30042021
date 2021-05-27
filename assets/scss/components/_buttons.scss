@@ -12,7 +12,11 @@
 
   .btn {
     padding: 15px;
-    width: 48%;
+    width: 100%;
+
+    i {
+      margin-right: 10px;
+    }
 
     &-buy:hover {
       color: white;

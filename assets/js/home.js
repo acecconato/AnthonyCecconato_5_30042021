@@ -5,7 +5,7 @@ let products = [];
 
 function renderHTMLProduct(product, type) {
     return `
-        <article data-id="${product._id}" class="col-8 col-md-6 col-xl-3 d-flex flex-column justify-content-between mx-auto mx-lg-0">
+        <article data-id="${product._id}" class="col-12 col-md-6 col-xl-3 d-flex flex-column justify-content-between mx-auto mx-lg-0">
             <img src="${product.imageUrl}" alt="">
             <h3>${product.name}</h3>
             <p class="product-description">${product.description}</p>
@@ -15,7 +15,8 @@ function renderHTMLProduct(product, type) {
                 <a href="//${config.basePath}/pages/product.html?id=${product._id}&type=${type}" 
                 class="btn btn-orinoco btn-buy" 
                 aria-label="Acheter">
-                    <i class="bi bi-cart-plus-fill"></i>
+                    <i class="bi bi-eye"></i>
+                    Voir le produit
                 </a>
             </div>
         </article>
