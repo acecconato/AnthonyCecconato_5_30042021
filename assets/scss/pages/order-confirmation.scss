@@ -1,1 +1,13 @@
 @import "../main.scss";
+
+.confirmation {
+
+  i {
+    margin-right: 15px;
+  }
+
+  &-info {
+    margin: 0;
+    line-height: 1.3;
+  }
+}
