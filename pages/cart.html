@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Orinoco - Produit</title>
+    <meta name="description"
+          content="Orinoco est une boutique en ligne qui se démarque des grands site e-commerce en créant des applications thématiques ne vendant qu’un seul groupe de produits. Il y a par exemple Oribook pour les livres ou Oritextil pour les vêtements.">
+
+    <link rel="stylesheet" href="./../assets/dist/css/cart.css">
+
+    <script src="./../assets/dist/js/cart.js" defer></script>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-md navbar-light bg-orinoco">
+        <div class="container d-flex justify-content-center">
+
+            <div class="navbar-brand text-center me-auto" aria-hidden="true">
+                <img src="./../assets/img/logo.jpg" alt="Logo d'Orinoco" height="75">
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Ouvrir/fermer la navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./../index.html">Accueil</a>
+                    </li>
+                    <li class="nav-item" tabindex="0">
+                        <a class="nav-link">Nos produits</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" tabindex="0" aria-label="Mon profil">
+                            <span class="d-md-none">Mon profil</span>
+                            <i class="d-none d-md-inline bi bi-person-circle" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" tabindex="0" aria-label="Mon panier">
+                            <span class="d-md-none">Mon panier</span>
+                            <i class="d-none d-md-inline bi bi-cart" aria-hidden="true"></i>
+                            <span id="cart-count" class="badge">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section id="cart" class="cart">
+        <div class="container divided">
+            <h1>Mon panier</h1>
+            <div class="row mt-5">
+
+                <section class="col-12 col-md-8 divided-left">
+
+                    <h2>Panier d'achat</h2>
+
+                    <article class="mt-5 mb-3 row cart-product">
+
+                        <div class="col-12 col-md-3">
+                            <img src="https://via.placeholder.com/150" class="img-thumbnail cart-image" alt="">
+                        </div>
+
+                        <div class="mt-3 mt-md-0 col-12 col-md-8 d-flex flex-column justify-content-between">
+                            <h3 class="h5 d-flex justify-content-between align-items-center">
+                                Product title
+                                <a href="#" class="cart-trash btn btn-danger"><i class="bi bi-trash"></i></a>
+                            </h3>
+
+                            <p class="cart-description">
+                                Cotton candy biscuit cookie brownie croissant jelly-o fruitcake. Oat cake halvah powder
+                                jujubes pie brownie sesame snacie
+                            </p>
+
+                            <div>
+                                <p class="cart-customization">Couleur: rouge</p>
+                                <p class="cart-quantity">Quantité: 8</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="mt-5 mb-3 row cart-product">
+
+                        <div class="col-12 col-md-3">
+                            <img src="https://via.placeholder.com/150" class="img-thumbnail cart-image" alt="">
+                        </div>
+
+                        <div class="mt-3 mt-md-0 col-12 col-md-8 d-flex flex-column justify-content-between">
+                            <h3 class="h5 d-flex justify-content-between align-items-center">
+                                Product title
+                                <a href="#" class="cart-trash btn btn-danger"><i class="bi bi-trash"></i></a>
+                            </h3>
+
+                            <p class="cart-description">
+                                Cotton candy biscuit cookie brownie croissant jelly-o fruitcake. Oat cake halvah powder
+                                jujubes pie brownie sesame snacie
+                            </p>
+
+                            <div>
+                                <p class="cart-customization">Couleur: rouge</p>
+                                <p class="cart-quantity">Quantité: 8</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="mt-5 mb-3 row cart-product">
+
+                        <div class="col-12 col-md-3">
+                            <img src="https://via.placeholder.com/150" class="img-thumbnail cart-image" alt="">
+                        </div>
+
+                        <div class="mt-3 mt-md-0 col-12 col-md-8 d-flex flex-column justify-content-between">
+                            <h3 class="h5 d-flex justify-content-between align-items-center">
+                                Product title
+                                <a href="#" class="cart-trash btn btn-danger"><i class="bi bi-trash"></i></a>
+                            </h3>
+
+                            <p class="cart-description">
+                                Cotton candy biscuit cookie brownie croissant jelly-o fruitcake. Oat cake halvah powder
+                                jujubes pie brownie sesame snacie
+                            </p>
+
+                            <div>
+                                <p class="cart-customization">Couleur: rouge</p>
+                                <p class="cart-quantity">Quantité: 8</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="mt-5 mb-3 row cart-product">
+
+                        <div class="col-12 col-md-3">
+                            <img src="https://via.placeholder.com/150" class="img-thumbnail cart-image" alt="">
+                        </div>
+
+                        <div class="mt-3 mt-md-0 col-12 col-md-8 d-flex flex-column justify-content-between">
+                            <h3 class="h5 d-flex justify-content-between align-items-center">
+                                Product title
+                                <a href="#" class="cart-trash btn btn-danger"><i class="bi bi-trash"></i></a>
+                            </h3>
+
+                            <p class="cart-description">
+                                Cotton candy biscuit cookie brownie croissant jelly-o fruitcake. Oat cake halvah powder
+                                jujubes pie brownie sesame snacie
+                            </p>
+
+                            <div>
+                                <p class="cart-customization">Couleur: rouge</p>
+                                <p class="cart-quantity">Quantité: 8</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="mt-5 mb-3 row cart-product">
+
+                        <div class="col-12 col-md-3">
+                            <img src="https://via.placeholder.com/150" class="img-thumbnail cart-image" alt="">
+                        </div>
+
+                        <div class="mt-3 mt-md-0 col-12 col-md-8 d-flex flex-column justify-content-between">
+                            <h3 class="h5 d-flex justify-content-between align-items-center">
+                                Product title
+                                <a href="#" class="cart-trash btn btn-danger"><i class="bi bi-trash"></i></a>
+                            </h3>
+
+                            <p class="cart-description">
+                                Cotton candy biscuit cookie brownie croissant jelly-o fruitcake. Oat cake halvah powder
+                                jujubes pie brownie sesame snacie
+                            </p>
+
+                            <div>
+                                <p class="cart-customization">Couleur: rouge</p>
+                                <p class="cart-quantity">Quantité: 8</p>
+                            </div>
+                        </div>
+                    </article>
+
+                </section>
+
+                <aside class="col-12 col-md-4 divided-right p-3">
+                    <div class="cart-summary bg-orinoco p-3">
+                        <h2>Résumé</h2>
+                        <hr>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between">Articles <span>3</span></li>
+                            <li class="list-group-item d-flex justify-content-between">Livraison <span>Gratuite</span></li>
+                            <li class="list-group-item d-flex justify-content-between">Total HT <span>15€</span></li>
+                            <li class="list-group-item d-flex justify-content-between">Taxes incluses <span>0€</span></li>
+                            <li class="list-group-item d-flex justify-content-between">Code promo <span>Aucun</span></li>
+                        </ul>
+
+                        <a class="btn btn-primary mt-5 mb-3 mx-auto d-block" href="#">Procéder au paiement</a>
+
+                        <div class="cart-logo text-center">
+                            <img class="img-fluid" src="./../assets/img/logo.jpg" alt="">
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="py-5">
+    <div class="container d-lg-flex flex-row justify-content-between">
+        <p>Orinoco, tous droit réservés</p>
+        <ul class="navbar-nav d-flex flex-lg-row gap-2 align-items-lg-center">
+            <li class="nav-item"><a class="nav-link" href="#">Mentions légales</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Politique de confidentialité</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">CGV</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">CGU</a></li>
+        </ul>
+    </div>
+</footer>
+
+</body>
+</html>

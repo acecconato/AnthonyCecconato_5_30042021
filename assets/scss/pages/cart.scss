@@ -1,1 +1,33 @@
 @import "../main.scss";
+
+.cart {
+  &-product {
+
+  }
+
+  &-image {
+    width: 100%;
+    max-width: 100%;
+    object-position: center;
+    object-fit: cover;
+  }
+
+  &-customization, &-quantity {
+    font-style: italic;
+    margin: 0;
+    line-height: 1;
+  }
+
+  &-description {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+  }
+
+  &-summary {
+    height: fit-content;
+  }
+}
