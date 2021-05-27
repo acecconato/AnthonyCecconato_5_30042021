@@ -6,8 +6,8 @@
   }
 
   &-image {
-    width: 100%;
-    max-width: 100%;
+    width: 50%;
+    max-width: 50%;
     object-position: center;
     object-fit: cover;
   }
@@ -29,5 +29,22 @@
 
   &-summary {
     height: fit-content;
+  }
+
+  &-form {
+    width: 100%;
+  }
+
+  aside {
+    & > div {
+      border-radius: 5px;
+    }
+  }
+}
+
+@include media-breakpoint-up('md') {
+  .cart-image {
+    width: 100%;
+    max-width: 100%;
   }
 }
