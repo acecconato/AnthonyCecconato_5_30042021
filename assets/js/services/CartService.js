@@ -14,7 +14,7 @@ export default class CartService {
 
         if (this.cart.hasOwnProperty(item.identifier)) {
 
-            this.updateQuantity(item.identifier, item.quantity);
+            this.updateQuantity(item.identifier, parseInt(item.quantity));
 
         } else {
 
@@ -41,10 +41,13 @@ export default class CartService {
      * @param {string} identifier
      */
     removeFromCart(identifier) {
-        delete this.cart[identifier];
+
+        if (this.cart.hasOwnProperty(identifier)) {
+            delete this.cart[identifier];
+            localStorage.setItem('cart', JSON.stringify(this.cart));
+        }
 
         this.updateCartCount();
-        this.persistCart();
     }
 
     /**
@@ -116,13 +119,11 @@ export default class CartService {
      * @param {number} quantity
      */
     updateQuantity(identifier, quantity) {
-        this.cart[identifier].quantity = parseInt(this.cart[identifier].quantity) + parseInt(quantity);
 
-        if (!this.cart[identifier].quantity) {
-            this.removeFromCart(identifier);
+        if (this.cart.hasOwnProperty(identifier)) {
+            this.cart[identifier].quantity = parseInt(this.cart[identifier].quantity) + quantity;
+            this.persistCart();
         }
-
-        this.persistCart();
     }
 
     /**
@@ -139,7 +140,7 @@ export default class CartService {
      * @return {void}
      */
     updateCartCount() {
-        document.getElementById('cart-count').innerText = Object.keys(this.cart).length.toString();
+        document.getElementById('cart-count').textContent = Object.keys(this.cart).length.toString();
     }
 
     /**

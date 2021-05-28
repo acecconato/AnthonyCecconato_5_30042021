@@ -71,29 +71,26 @@ function renderHTMLNoProductInCart() {
  * @param target
  */
 function processUpdateQuantity(action, target) {
+    // Deactivate update buttons
     toggleChildButtons(target.parentElement);
+
     const identifier = target.parentElement.getAttribute('data-product-id');
 
-    if (action === 'increase') {
+    if (action === 'increase' && cartService.getItemByIdentifier(identifier).quantity < 99) {
         cartService.updateQuantity(identifier, 1);
     }
 
-    if (action === 'decrease') {
+    if (action === 'decrease' && cartService.getItemByIdentifier(identifier).quantity > 1) {
         cartService.updateQuantity(identifier, -1);
     }
 
-    // Update quantity field if the quantity is > 0, otherwise remove the product from the list
-    if (cartService.getItemByIdentifier(identifier)) {
-        document.getElementById(identifier).querySelector('span.qty').textContent = cartService.getItemByIdentifier(identifier).quantity;
-    } else {
-        document.getElementById(identifier).remove();
+    // Update quantity field if the quantity
+    document.getElementById(identifier).querySelector('span.qty').textContent = cartService.getItemByIdentifier(identifier).quantity;
 
-        if (cartService.count() < 1) {
-            renderHTMLNoProductInCart();
-        }
-    }
-
+    // Regenerate the summary
     renderHTMLSummary(cartService.getSummary());
+
+    // Reactivate buttons
     toggleChildButtons(target.parentElement);
 }
 
@@ -125,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cartListElement.innerHTML += cartItems.join('');
     } else {
         renderHTMLNoProductInCart();
-        document.getElementById('cart-checkout').remove();
     }
 
     renderHTMLSummary(cartService.getSummary());
