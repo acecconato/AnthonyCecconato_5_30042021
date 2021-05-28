@@ -5,6 +5,8 @@ import {loadObjectByIdAndType} from "./services/api";
 import CartService from "./services/CartService";
 import {renderAddToCartNotification} from "./helpers/notifications";
 
+let cartService = new CartService();
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
@@ -26,7 +28,7 @@ function renderHTMLSingleProduct(product) {
         <section class="row">
             <div class="col-12 col-md-6 position-relative overflow-hidden">
                 <img class="product-image img-thumbnail" src="${product.imageUrl}" alt="">
-                <p class="product-price">${product.price} €</p>
+                <p class="product-price">${cartService.formatPriceToEur(product.price / 100)}</p>
             </div>
             <div class="col-12 col-md-6">
                 <h1 class="mt-3">${product.name}</h1>
@@ -73,7 +75,6 @@ function handleSubmit(e, product) {
     product.selectedOption = document.getElementById('options').value;
     product.quantity = document.getElementById('quantity').value;
 
-    let cartService = new CartService();
     cartService.addToCart(product);
 
     renderAddToCartNotification();
