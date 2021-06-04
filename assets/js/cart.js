@@ -109,6 +109,38 @@ function toggleChildButtons(target) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const form = document.querySelector('.needs-validation');
+
+    form.querySelectorAll('input').forEach((field) => {
+
+        // When the user write in an input
+        field.addEventListener('input', function (e) {
+            let val = e.target.value;
+
+            if (val != '42') {
+                field.setCustomValidity('invalid');
+            } else {
+                e.target.setCustomValidity('');
+            }
+
+        });
+    })
+
+    // On form submit
+    form.addEventListener('submit', function (event) {
+
+        if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+    }, false)
+
+
+
+
     const cartService = new CartService();
 
     let cartListElement = document.getElementById('cart-list');
