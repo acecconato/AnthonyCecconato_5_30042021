@@ -1,4 +1,5 @@
 import CartService from './services/CartService.js';
+import Validator from "./services/Validator";
 
 let cartService = new CartService();
 let cartItems = [];
@@ -72,7 +73,7 @@ function renderHTMLNoProductInCart() {
  */
 function processUpdateQuantity(action, target) {
     // Deactivate update buttons
-    toggleChildButtons(target.parentElement);
+    _toggleChildButtons(target.parentElement);
 
     const identifier = target.parentElement.getAttribute('data-product-id');
 
@@ -91,14 +92,18 @@ function processUpdateQuantity(action, target) {
     renderHTMLSummary(cartService.getSummary());
 
     // Reactivate buttons
-    toggleChildButtons(target.parentElement);
+    _toggleChildButtons(target.parentElement);
 }
 
 /**
  * Enable / Disable .btn child elements from a target
+ *
+ * When the user click on increase or decrease button from the cart page, we need to disable the buttons
+ * to prevent spam until the process is terminated
  * @param target
+ * @private
  */
-function toggleChildButtons(target) {
+function _toggleChildButtons(target) {
     Array.from(target.getElementsByClassName('btn')).forEach(element => {
         if (element.classList.contains('disabled')) {
             element.classList.remove('disabled')
@@ -108,38 +113,146 @@ function toggleChildButtons(target) {
     })
 }
 
+/**
+ * Create and display a new error on the specified field
+ * @param fieldNode
+ * @param message
+ * @private
+ */
+function _setError(fieldNode, message) {
+
+    const feedbackId = fieldNode.id + '-feedback';
+    const feedbackElt = document.getElementById(feedbackId);
+
+    if (!feedbackElt) {
+        let errFeedbackElt = document.createElement('div');
+        errFeedbackElt.classList.add('invalid-feedback');
+        errFeedbackElt.id = fieldNode.id + '-feedback';
+        errFeedbackElt.textContent = message;
+
+        fieldNode.parentNode.append(errFeedbackElt);
+    }
+
+    if (feedbackElt && message !== feedbackElt.textContent) {
+        feedbackElt.textContent = message;
+    }
+
+    fieldNode.setCustomValidity(message);
+}
+
+function formProcess(form) {
+    form.classList.add('was-validated');
+    // Todo process form submit
+}
+
+/**
+ * Validate a form field
+ * @param fieldNode
+ * @param value
+ * @private
+ */
+function _validateInput(fieldNode, value) {
+
+    let err = false;
+
+    if (value.length < 1) {
+
+        err = true;
+        _setError(fieldNode, "Ne doit pas être vide");
+
+    } else {
+
+        switch (fieldNode.id) {
+            case 'email':
+                if (value.length > 20) {
+                    err = true;
+                    _setError(fieldNode, "Ne peut exceder 20 caractères");
+
+                } else if (!Validator.isValidEmail(value)) {
+                    err = true;
+                    _setError(fieldNode, "Format invalide");
+                }
+
+                break;
+
+            case 'firstname':
+            case 'lastname':
+                if (value.length > 15) {
+                    err = true;
+                    _setError(fieldNode, "Ne peut exceder 15 caractères");
+
+                } else if (!Validator.isValidName(value)) {
+                    err = true;
+                    _setError(fieldNode, "Contient des caractères invalides");
+                }
+
+                break;
+
+            case 'address':
+                if (value.length < 5) {
+                    err = true;
+                    _setError(fieldNode, "L'adresse est trop courte");
+
+                } else if (value.length > 50) {
+                    err = true;
+                    _setError(fieldNode, "Ne peut exceder 50 caractères");
+
+                } else {
+                    if (!Validator.isValidAddress(value)) {
+                        err = true;
+                        _setError(fieldNode, "Contient des caractères invalides.");
+                    }
+                }
+
+                break;
+
+            case 'city':
+                if (value.length > 30) {
+                    err = true;
+                    _setError(fieldNode, "Ne peut exceder 30 caractères");
+                } else if (!Validator.isValidCity(value)) {
+                    err = true;
+                    _setError(fieldNode, "Contient des caractères invalides");
+                }
+
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+    if (!err) {
+        fieldNode.setCustomValidity('');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const form = document.querySelector('.needs-validation');
+    const inputs = form.querySelectorAll('input');
 
-    form.querySelectorAll('input').forEach((field) => {
+    inputs.forEach((field) => {
+        // When the user write in an input, validate the entry
+        field.addEventListener('input', (e) => {
+            const value = e.target.value.trim();
 
-        // When the user write in an input
-        field.addEventListener('input', function (e) {
-            let val = e.target.value;
+            form.classList.add('was-validated');
+            _validateInput(e.target, value);
 
-            if (val != '42') {
-                field.setCustomValidity('invalid');
-            } else {
-                e.target.setCustomValidity('');
-            }
-
+            let submitBtnElt = document.getElementById('submit');
+            submitBtnElt.disabled = !form.checkValidity();
         });
     })
 
-    // On form submit
-    form.addEventListener('submit', function (event) {
+    // Handle form submission
+    form.addEventListener('submit', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
 
-        if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-        }
-
-        form.classList.add('was-validated')
-    }, false)
-
-
-
+        formProcess(form);
+    })
 
     const cartService = new CartService();
 
