@@ -13,7 +13,7 @@ export function isValidEmail(str) {
  * @return {boolean}
  */
 export function isValidAddress(str) {
-    const regex = new RegExp(/^[a-z]+[\w \-\_\'\"]+[a-z]+$/i);
+    const regex = new RegExp(/^[a-z\d]+(?:[\w\d,\-\_\'\"]+\s)*[a-z\d]+$/);
     return !!str.match(regex);
 }
 
