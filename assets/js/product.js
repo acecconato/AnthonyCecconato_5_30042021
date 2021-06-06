@@ -56,6 +56,8 @@ function renderHTMLSingleProduct(product) {
                             </div>
                         </div>
                     </fieldset>
+    
+                    <input type="hidden" name="type" id="type" value="${product.type}">
 
                     <button type="submit" class="btn btn-orinoco">Ajouter au panier</button>
                 </form>
@@ -98,6 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         let product = await loadObjectByIdAndType(idProduct, type);
         product.option_key = await getCustomizationOptionsByType(type);
+        product.type = type;
 
         document.title = product.name + ' - Vendu par Orinoco';
         document.querySelector('meta[name="description"]').setAttribute("content", product.description);

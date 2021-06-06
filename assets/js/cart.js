@@ -1,5 +1,6 @@
 import CartService from './services/CartService.js';
 import Validator from "./services/Validator";
+import {sendOrder} from "./services/api.js";
 
 let cartService = new CartService();
 let cartItems = [];
@@ -85,7 +86,7 @@ function processUpdateQuantity(action, target) {
         cartService.updateQuantity(identifier, -1);
     }
 
-    // Update quantity field if the quantity
+    // Update quantity field
     document.getElementById(identifier).querySelector('span.qty').textContent = cartService.getItemByIdentifier(identifier).quantity;
 
     // Regenerate the summary
@@ -140,9 +141,33 @@ function _setError(fieldNode, message) {
     fieldNode.setCustomValidity(message);
 }
 
-function formProcess(form) {
+async function formProcess(form) {
     form.classList.add('was-validated');
-    // Todo process form submit
+
+    let formData = {}
+    Object.assign(formData, {
+        contact: {
+            firstName: document.getElementById('firstname').value.trim(),
+            lastName: document.getElementById('lastname').value.trim(),
+            address: document.getElementById('address').value.trim(),
+            city: document.getElementById('city').value.trim(),
+            email: document.getElementById('email').value.trim(),
+        }
+    })
+
+    let responses = [];
+    for (const [type, products] of Object.entries(cartService.getProductsSortedByType())) {
+
+        const response = await sendOrder(type, {...formData, products: products});
+
+        if (response.status !== 201) {
+            throw new Error();
+        }
+
+        responses = [...responses, await response.json()];
+    }
+
+    localStorage.setItem('order-confirmation', JSON.stringify(responses));
 }
 
 /**
@@ -251,10 +276,14 @@ document.addEventListener('DOMContentLoaded', () => {
         e.stopPropagation();
         e.preventDefault();
 
-        formProcess(form);
+        if (form.checkValidity()) {
+            formProcess(form).then(() => {
+                window.location.assign('/pages/order-confirmation.html');
+            }).catch((err) => {
+                console.error(err);
+            });
+        }
     })
-
-    const cartService = new CartService();
 
     let cartListElement = document.getElementById('cart-list');
 

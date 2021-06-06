@@ -20,6 +20,7 @@ export default class CartService {
 
             this.cart[item.identifier] = {
                 _id: item._id,
+                type: item.type,
                 name: item.name,
                 description: item.description,
                 imageUrl: item.imageUrl,
@@ -144,7 +145,47 @@ export default class CartService {
     }
 
     /**
-     * Persist the cart to the localStorage
+     * Sort products by type and quantity
+     * e.g {
+     *       "teddies": [
+     *           "5be9c8541c9d440000665243",
+     *           "5be9c8541c9d440000665243",
+     *           "5beaa8bf1c9d440000a57d94",
+     *           "5beaa8bf1c9d440000a57d94"
+     *       ],
+     *       "cameras": [
+     *           "5be1ed3f1c9d44000030b061",
+     *           "5be1ed3f1c9d44000030b061"
+     *       ]
+     *   }
+     * @return {Object}
+     */
+    getProductsSortedByType() {
+        let sortedProducts = {};
+
+        Object.values(this.cart).forEach((item) => {
+
+            if (sortedProducts.hasOwnProperty(item.type)) {
+
+                for (let i = 0; i < item.quantity; i++) {
+                    sortedProducts[item.type].push(item._id);
+                }
+
+            } else {
+
+                sortedProducts[item.type] = [];
+
+                for (let i = 0; i < item.quantity; i++) {
+                    sortedProducts[item.type].push(item._id);
+                }
+            }
+        })
+
+        return sortedProducts;
+    }
+
+    /**
+     * Persist the cart in the localStorage
      * @return {void}
      */
     persistCart() {
