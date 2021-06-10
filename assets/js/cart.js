@@ -167,6 +167,7 @@ async function formProcess(form) {
     }
 
     localStorage.setItem('order-confirmation', JSON.stringify(responses));
+    CartService.clearCart();
 }
 
 /**
