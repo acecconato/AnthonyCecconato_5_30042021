@@ -2,7 +2,6 @@ import CartService from './services/CartService.js';
 import Validator from "./services/Validator";
 import {sendOrder} from "./services/api.js";
 
-let cartService = new CartService();
 let cartItems = [];
 
 /**
@@ -78,19 +77,19 @@ function processUpdateQuantity(action, target) {
 
     const identifier = target.parentElement.getAttribute('data-product-id');
 
-    if (action === 'increase' && cartService.getItemByIdentifier(identifier).quantity < 99) {
-        cartService.updateQuantity(identifier, 1);
+    if (action === 'increase' && CartService.getItemByIdentifier(identifier).quantity < 99) {
+        CartService.updateQuantity(identifier, 1);
     }
 
-    if (action === 'decrease' && cartService.getItemByIdentifier(identifier).quantity > 1) {
-        cartService.updateQuantity(identifier, -1);
+    if (action === 'decrease' && CartService.getItemByIdentifier(identifier).quantity > 1) {
+        CartService.updateQuantity(identifier, -1);
     }
 
     // Update quantity field
-    document.getElementById(identifier).querySelector('span.qty').textContent = cartService.getItemByIdentifier(identifier).quantity;
+    document.getElementById(identifier).querySelector('span.qty').textContent = CartService.getItemByIdentifier(identifier).quantity;
 
     // Regenerate the summary
-    renderHTMLSummary(cartService.getSummary());
+    renderHTMLSummary(CartService.getSummary());
 
     // Reactivate buttons
     _toggleChildButtons(target.parentElement);
@@ -156,7 +155,7 @@ async function formProcess(form) {
     })
 
     let responses = [];
-    for (const [type, products] of Object.entries(cartService.getProductsSortedByType())) {
+    for (const [type, products] of Object.entries(CartService.getProductsSortedByType())) {
 
         const response = await sendOrder(type, {...formData, products: products});
 
@@ -288,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let cartListElement = document.getElementById('cart-list');
 
     // List products in cart
-    for (const [identifier, item] of Object.entries(cartService.getAll())) {
+    for (const [identifier, item] of Object.entries(CartService.getAll())) {
         cartItems.push(renderHTMLCartItem(identifier, item));
     }
 
@@ -298,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderHTMLNoProductInCart();
     }
 
-    renderHTMLSummary(cartService.getSummary());
+    renderHTMLSummary(CartService.getSummary());
 
     // Handle remove product from cart
     Array.from(document.getElementsByClassName('cart-trash')).forEach(
@@ -309,13 +308,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const identifier = e.currentTarget.getAttribute('data-delete')
 
                 document.getElementById(identifier).remove();
-                cartService.removeFromCart(identifier);
+                CartService.removeFromCart(identifier);
 
-                if (cartService.count() < 1) {
+                if (CartService.count() < 1) {
                     renderHTMLNoProductInCart();
                 }
 
-                renderHTMLSummary(cartService.getSummary());
+                renderHTMLSummary(CartService.getSummary());
             })
         }
     )

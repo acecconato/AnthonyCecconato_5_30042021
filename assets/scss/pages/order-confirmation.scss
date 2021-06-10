@@ -11,3 +11,18 @@
     line-height: 1.3;
   }
 }
+
+#products-details {
+  img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+  }
+
+  .top-details {
+    p {
+      margin-bottom: 0;
+      @include font-size(0.9rem);
+    }
+  }
+}

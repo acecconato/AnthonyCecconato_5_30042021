@@ -1,8 +1,7 @@
 import config from './config/config.js';
 import {loadObjectsFromApi} from "./services/api";
-import CartService from "./services/CartService";
+import {formatPriceToEur} from "./services/CartService";
 
-let cartService = new CartService();
 let products = [];
 
 function renderHTMLProduct(product, type) {
@@ -11,7 +10,7 @@ function renderHTMLProduct(product, type) {
             <img src="${product.imageUrl}" alt="">
             <h3>${product.name}</h3>
             <p class="product-description">${product.description}</p>
-            <p class="product-price">${cartService.formatPriceToEur(product.price / 100)}</p>
+            <p class="product-price">${formatPriceToEur(product.price / 100)}</p>
 
             <div class="product-action">
                 <a href="//${config.basePath}/pages/product.html?id=${product._id}&type=${type}" 

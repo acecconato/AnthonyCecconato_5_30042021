@@ -1,4 +1,4 @@
-export default class CartService {
+class CartService {
 
     constructor() {
         this.cart = (localStorage.getItem('cart')) ? JSON.parse(localStorage.getItem('cart')) : {};
@@ -26,7 +26,7 @@ export default class CartService {
                 imageUrl: item.imageUrl,
                 option_key: item.option_key,
                 price: item.price,
-                displayPrice: this.formatPriceToEur(item.price / 100),
+                displayPrice: formatPriceToEur(item.price / 100),
                 quantity: item.quantity,
                 selectedOption: item.selectedOption
             };
@@ -86,19 +86,10 @@ export default class CartService {
         return {
             nbItems: Object.keys(this.cart).length,
             delivery: 'Gratuite',
-            totalTTC: this.formatPriceToEur(prices.reduce((a, b) => a + b, 0) / 100),
-            totalWT: this.formatPriceToEur(prices.reduce((a, b) => a + b, 0) / 100 * 0.80),
+            totalTTC: formatPriceToEur(prices.reduce((a, b) => a + b, 0) / 100),
+            totalWT: formatPriceToEur(prices.reduce((a, b) => a + b, 0) / 100 * 0.80),
             vat: '20%'
         };
-    }
-
-    /**
-     * Format a number to the EUROS price format
-     * @param {number} price
-     * @return {string}
-     */
-    formatPriceToEur(price) {
-        return new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(price);
     }
 
     /**
@@ -192,3 +183,28 @@ export default class CartService {
         localStorage.setItem('cart', JSON.stringify(this.cart));
     }
 }
+
+/**
+ * Format a number to the EUROS price format
+ * @param {number} price
+ * @return {string}
+ */
+export function formatPriceToEur(price) {
+    return new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(price);
+}
+
+/**
+ * Returns total price from a product list
+ * @param {array} products
+ */
+export function getTotalTTCFromProductList(products) {
+    let totalTTC = 0;
+    products.forEach((product) => {
+        totalTTC += product.price;
+    });
+
+    return formatPriceToEur(totalTTC / 100);
+}
+
+export default new CartService();
+
