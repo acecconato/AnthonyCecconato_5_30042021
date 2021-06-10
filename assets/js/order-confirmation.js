@@ -47,7 +47,14 @@ function renderHTMLOrderDetails(order) {
 document.addEventListener('DOMContentLoaded', () => {
     const orders = JSON.parse(localStorage.getItem('order-confirmation'));
 
-    document.getElementById('nb-order').textContent = orders.length;
+    if (orders.length > 1) {
+        document.getElementById('toggle-alert').innerHTML = `
+            <p class="alert alert-info">
+                Pour des raisons techniques, votre commande a été divisée en ${orders.length} commandes
+                distinctes.
+            </p>
+        `;
+    }
 
     orders.forEach((order) => {
         order.totalTTC = getTotalTTCFromProductList(order.products);
