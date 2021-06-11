@@ -8,6 +8,12 @@
   margin-bottom: 10px;
 }
 
+// Fix bootstrap bug
+button:disabled {
+  cursor: not-allowed;
+  pointer-events: all !important;
+}
+
 .product-action {
 
   .btn {
