@@ -1,6 +1,13 @@
 @import "../main.scss";
 
 #product-list {
+
+  position: relative;
+
+  &::before {
+    @include skewDivider();
+  }
+
   .filter {
     padding-left: 0;
 
