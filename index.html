@@ -6,7 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Orinoco</title>
-    <meta name="description" content="Orinoco est une boutique en ligne qui se démarque des grands site e-commerce en créant des applications thématiques ne vendant qu’un seul groupe de produits. Il y a par exemple Oribook pour les livres ou Oritextil pour les vêtements.">
+    <meta name="description"
+          content="Orinoco est une boutique en ligne qui se démarque des grands site e-commerce en créant des applications thématiques ne vendant qu’un seul groupe de produits. Il y a par exemple Oribook pour les livres ou Oritextil pour les vêtements.">
 
     <link rel="stylesheet" href="./assets/dist/css/home.css">
 
@@ -47,7 +48,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./pages/cart.html" class="nav-link position-relative" tabindex="0" aria-label="Mon panier">
+                        <a href="./pages/cart.html" class="nav-link position-relative" tabindex="0"
+                           aria-label="Mon panier">
                             <span class="d-md-none">Mon panier</span>
                             <i class="d-none d-md-inline bi bi-cart" aria-hidden="true"></i>
                             <span id="cart-count" class="badge">0</span>
@@ -74,9 +76,21 @@
             <h2>Nos différents groupes de produits</h2>
 
             <ul class="filter d-flex flex-wrap flex-md-row mt-4" id="home-load-products">
-                <li><a class="btn btn-orinoco" data-type='teddies' tabindex="0">Orinounours</a></li>
-                <li><a class="btn btn-orinoco" data-type='cameras' tabindex="0">Oriphotos</a></li>
-                <li><a class="btn btn-orinoco" data-type='furniture' tabindex="0">Orimeubles</a></li>
+                <li>
+                    <a class="btn btn-orinoco btn1" data-type='teddies' data-text="orinounours" tabindex="0">
+                        Orinounours
+                    </a>
+                </li>
+                <li>
+                    <a class="btn btn-orinoco btn1" data-type='cameras' data-text="oriphotos" tabindex="0">
+                        Oriphotos
+                    </a>
+                </li>
+                <li>
+                    <a class="btn btn-orinoco btn1" data-type='furniture' data-text="orimeubles" tabindex="0">
+                        Orimeubles
+                    </a>
+                </li>
             </ul>
 
             <div class="row mt-5" id="product-list-items"></div>
