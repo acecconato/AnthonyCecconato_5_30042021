@@ -23,6 +23,12 @@ button:disabled {
   pointer-events: all !important;
 }
 
+// Fix bootstrap bug
+button:disabled {
+  cursor: not-allowed;
+  pointer-events: all !important;
+}
+
 .product-action {
 
   .btn {
