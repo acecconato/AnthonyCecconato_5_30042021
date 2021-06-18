@@ -13,9 +13,9 @@ class CartService {
   }
 
   /**
-     * Add an item to the cart
-     * @param {object} item
-     */
+   * Add an item to the cart
+   * @param {object} item
+   */
   addToCart(item) {
     item.identifier = this.generateIdentifierFromString(`${item._id}-${item.selectedOption}`);
 
@@ -42,9 +42,9 @@ class CartService {
   }
 
   /**
-     * Remove an item from the cart
-     * @param {string} identifier
-     */
+   * Remove an item from the cart
+   * @param {string} identifier
+   */
   removeFromCart(identifier) {
     if (this.cart[identifier]) {
       delete this.cart[identifier];
@@ -55,34 +55,34 @@ class CartService {
   }
 
   /**
-     * Return the cart
-     * @return {object|{}}
-     */
+   * Return the cart
+   * @return {object|{}}
+   */
   getAll() {
     return this.cart;
   }
 
   /**
-     *
-     * @param {string} identifier
-     * @return {Object|null}
-     */
+   * Get an item from the cart by his identifier
+   * @param {string} identifier
+   * @return {Object|null}
+   */
   getItemByIdentifier(identifier) {
     return this.cart[identifier] ?? null;
   }
 
   /**
-     * Return the number of cart's item
-     * @return {number}
-     */
+   * Return the number of cart's item
+   * @return {number}
+   */
   count() {
     return Object.keys(this.cart).length;
   }
 
   /**
-     * Read the cart to return a summary
-     * @return {{delivery: string, totalTTC: string, vat: string, totalWT: string, nbItems: number}}
-     */
+   * Read the cart object then returns a summary
+   * @return {{delivery: string, totalTTC: string, vat: string, totalWT: string, nbItems: number}}
+   */
   getSummary() {
     const prices = Object.values(this.cart).map((item) => item.price * item.quantity);
 
@@ -96,9 +96,9 @@ class CartService {
   }
 
   /**
-     * Clear the cart
-     * @return {void}
-     */
+   * Clear the cart
+   * @return {void}
+   */
   clearCart() {
     this.cart = {};
     localStorage.removeItem('cart');
@@ -109,10 +109,10 @@ class CartService {
   }
 
   /**
-     * Update a product's quantity in the cart based on his identifier
-     * @param {string} identifier
-     * @param {number} quantity
-     */
+   * Update a product's quantity in the cart based on his identifier
+   * @param {string} identifier
+   * @param {number} quantity
+   */
   updateQuantity(identifier, quantity) {
     if (this.cart[identifier]) {
       this.cart[identifier].quantity = parseInt(this.cart[identifier].quantity) + quantity;
@@ -121,38 +121,38 @@ class CartService {
   }
 
   /**
-     * Generate a unique id based on the product _id and the selected option.
-     * @param {string} str
-     * @returns {string}
-     */
+   * Generate a unique id based on the product _id and the selected option.
+   * @param {string} str
+   * @returns {string}
+   */
   generateIdentifierFromString(str) {
     return str.toLowerCase().replace(/\s/g, '');
   }
 
   /**
-     * Update the cart-count element (Actually inside the top menu)
-     * @return {void}
-     */
+   * Update the cart-count element (Actually inside the top menu)
+   * @return {void}
+   */
   updateCartCount() {
     document.getElementById('cart-count').textContent = Object.keys(this.cart).length.toString();
   }
 
   /**
-     * Sort products by type and quantity
-     * e.g {
-     *       "teddies": [
-     *           "5be9c8541c9d440000665243",
-     *           "5be9c8541c9d440000665243",
-     *           "5beaa8bf1c9d440000a57d94",
-     *           "5beaa8bf1c9d440000a57d94"
-     *       ],
-     *       "cameras": [
-     *           "5be1ed3f1c9d44000030b061",
-     *           "5be1ed3f1c9d44000030b061"
-     *       ]
-     *   }
-     * @return {Object}
-     */
+   * Sort products by type and quantity
+   * e.g {
+   *       "teddies": [
+   *           "5be9c8541c9d440000665243",
+   *           "5be9c8541c9d440000665243",
+   *           "5beaa8bf1c9d440000a57d94",
+   *           "5beaa8bf1c9d440000a57d94"
+   *       ],
+   *       "cameras": [
+   *           "5be1ed3f1c9d44000030b061",
+   *           "5be1ed3f1c9d44000030b061"
+   *       ]
+   *   }
+   * @return {Object}
+   */
   getProductsSortedByType() {
     const sortedProducts = {};
 
@@ -174,9 +174,9 @@ class CartService {
   }
 
   /**
-     * Persist the cart in the localStorage
-     * @return {void}
-     */
+   * Persist the cart in the localStorage
+   * @return {void}
+   */
   persistCart() {
     localStorage.setItem('cart', JSON.stringify(this.cart));
   }

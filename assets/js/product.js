@@ -1,28 +1,51 @@
-import {Tooltip, Toast, Popover} from "bootstrap";
-
-import config from "./config/config.js";
-import {loadObjectByIdAndType} from "./services/api";
-import CartService, {formatPriceToEur} from "./services/CartService";
-import {renderAddToCartNotification} from "./helpers/notifications";
+import config from './config/config';
+import { loadObjectByIdAndType } from './services/api';
+import CartService, { formatPriceToEur } from './services/CartService';
+import { renderAddToCartNotification } from './helpers/notifications';
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
+/**
+ * Handle form submission
+ * @param {object} e Event
+ * @param {object} product Product item
+ */
+function handleSubmit(e, product) {
+  e.preventDefault();
+
+  product.selectedOption = document.getElementById('options').value;
+  product.quantity = document.getElementById('quantity').value;
+
+  CartService.addToCart(product);
+
+  renderAddToCartNotification();
+}
+
+/**
+ * Render HTML product options
+ * @param product
+ * @return {string}
+ */
 function renderHTMLProductOptions(product) {
-    let options = [];
+  const options = [];
 
-    product.options.forEach((option) => {
-        options.push(`<option value="${option}">${option}</option>`)
-    });
+  product.options.forEach((option) => {
+    options.push(`<option value="${option}">${option}</option>`);
+  });
 
-    return `
+  return `
         <option hidden value="">Veuillez sélectionner une option</option>
         ${options}
     `;
 }
 
+/**
+ * Render HTML single product
+ * @param product
+ */
 function renderHTMLSingleProduct(product) {
-    document.querySelector('#single-product > .container').innerHTML = `
+  document.querySelector('#single-product > .container').innerHTML = `
         <section class="row">
             <div class="col-12 col-md-6 position-relative overflow-hidden">
                 <img class="product-image img-thumbnail" src="${product.imageUrl}" alt="">
@@ -42,7 +65,7 @@ function renderHTMLSingleProduct(product) {
                         <div class="input-group mb-3">
                             <select id="options" class="form-select" aria-label="Selectionner l'option" required>
                           
-                                ` + renderHTMLProductOptions(product) + `
+                                ${renderHTMLProductOptions(product)}
                                 
                             </select>
                         </div>
@@ -63,55 +86,47 @@ function renderHTMLSingleProduct(product) {
         </section>
     `;
 
-    // Form submission
-    document.getElementById('add-to-cart').addEventListener('submit', (e) => {
-        handleSubmit(e, product);
-    });
+  // Form submission
+  document.getElementById('add-to-cart').addEventListener('submit', (e) => {
+    handleSubmit(e, product);
+  });
 }
 
-function handleSubmit(e, product) {
-    e.preventDefault();
-
-    product.selectedOption = document.getElementById('options').value;
-    product.quantity = document.getElementById('quantity').value;
-
-    CartService.addToCart(product);
-
-    renderAddToCartNotification();
-}
-
+/**
+ * Get customization options by type
+ * @param type
+ * @return {Promise<string>}
+ */
 async function getCustomizationOptionsByType(type) {
-    for (const [key, value] of Object.entries(config.types_options)) {
-        if (type === key) {
-            return value;
-        }
+  for (const [key, value] of Object.entries(config.types_options)) {
+    if (type === key) {
+      return value;
     }
+  }
 
-    return Promise.reject('Type ' + type + ' not found!');
+  return Promise.reject(`Type ${type} not found!`);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  const idProduct = urlParams.get('id');
+  const type = urlParams.get('type');
 
-    const idProduct = urlParams.get('id');
-    const type = urlParams.get('type');
+  try {
+    const product = await loadObjectByIdAndType(idProduct, type);
+    product.option_key = await getCustomizationOptionsByType(type);
+    product.type = type;
 
-    try {
-        let product = await loadObjectByIdAndType(idProduct, type);
-        product.option_key = await getCustomizationOptionsByType(type);
-        product.type = type;
+    document.title = `${product.name} - Vendu par Orinoco`;
+    document.querySelector('meta[name="description"]').setAttribute('content', product.description);
 
-        document.title = product.name + ' - Vendu par Orinoco';
-        document.querySelector('meta[name="description"]').setAttribute("content", product.description);
+    product.options = [];
+    product[product.option_key].forEach((option) => {
+      product.options.push(option);
+    });
 
-        product.options = [];
-        product[product.option_key].forEach((option) => {
-            product.options.push(option);
-        });
-
-        renderHTMLSingleProduct(product);
-
-    } catch (e) {
-        console.error(e)
-        document.querySelector('#single-product > .container').innerHTML = `<p class="alert alert-danger">Une erreur est survenue lors du chargement du produit !</p>`
-    }
+    renderHTMLSingleProduct(product);
+  } catch (e) {
+    console.error(e);
+    document.querySelector('#single-product > .container').innerHTML = '<p class="alert alert-danger">Une erreur est survenue lors du chargement du produit !</p>';
+  }
 });

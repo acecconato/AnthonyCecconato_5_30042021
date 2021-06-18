@@ -1,8 +1,26 @@
-import CartService from './services/CartService.js';
-import Validator from "./services/Validator";
-import {sendOrder} from "./services/api.js";
+import CartService from './services/CartService';
+import Validator from './services/Validator';
+import { sendOrder } from './services/api';
 
-let cartItems = [];
+const cartItems = [];
+
+/**
+ * Enable / Disable .btn child elements from a target
+ *
+ * When the user click on increase or decrease button from the cart page, we need to disable the
+ * buttons to prevent spam until the process is terminated
+ * @param target
+ * @private
+ */
+function _toggleChildButtons(target) {
+  Array.from(target.getElementsByClassName('btn')).forEach((element) => {
+    if (element.classList.contains('disabled')) {
+      element.classList.remove('disabled');
+    } else {
+      element.classList.add('disabled');
+    }
+  });
+}
 
 /**
  * Render the HTML products stored in the cart
@@ -11,7 +29,7 @@ let cartItems = [];
  * @returns {string}
  */
 function renderHTMLCartItem(identifier, item) {
-    return `
+  return `
         <article class="mt-5 mb-3 row cart-product" id="${identifier}">
             <div class="col-12 col-md-3 d-flex align-items-center">
                 <img src="${item.imageUrl}" class="img-thumbnail cart-image" alt="">
@@ -48,7 +66,7 @@ function renderHTMLCartItem(identifier, item) {
  * @returns {string}
  */
 function renderHTMLSummary(summary) {
-    document.getElementById('summary-group').innerHTML = `
+  document.getElementById('summary-group').innerHTML = `
         <li class="list-group-item d-flex justify-content-between">Articles <span>${summary.nbItems}</span></li>
         <li class="list-group-item d-flex justify-content-between">Livraison <span>${summary.delivery}</span></li>
         <li class="list-group-item d-flex justify-content-between">Total TTC <span>${summary.totalTTC}</span></li>
@@ -62,8 +80,8 @@ function renderHTMLSummary(summary) {
  * @return void
  */
 function renderHTMLNoProductInCart() {
-    document.getElementById('cart-list').innerHTML = `<p class="alert alert-warning">Vous n'avez pas d'articles dans votre panier</p>`;
-    document.getElementById('cart-checkout').remove();
+  document.getElementById('cart-list').innerHTML = '<p class="alert alert-warning">Vous n\'avez pas d\'articles dans votre panier</p>';
+  document.getElementById('cart-checkout').remove();
 }
 
 /**
@@ -72,45 +90,27 @@ function renderHTMLNoProductInCart() {
  * @param target
  */
 function processUpdateQuantity(action, target) {
-    // Deactivate update buttons
-    _toggleChildButtons(target.parentElement);
+  // Deactivate update buttons
+  _toggleChildButtons(target.parentElement);
 
-    const identifier = target.parentElement.getAttribute('data-product-id');
+  const identifier = target.parentElement.getAttribute('data-product-id');
 
-    if (action === 'increase' && CartService.getItemByIdentifier(identifier).quantity < 99) {
-        CartService.updateQuantity(identifier, 1);
-    }
+  if (action === 'increase' && CartService.getItemByIdentifier(identifier).quantity < 99) {
+    CartService.updateQuantity(identifier, 1);
+  }
 
-    if (action === 'decrease' && CartService.getItemByIdentifier(identifier).quantity > 1) {
-        CartService.updateQuantity(identifier, -1);
-    }
+  if (action === 'decrease' && CartService.getItemByIdentifier(identifier).quantity > 1) {
+    CartService.updateQuantity(identifier, -1);
+  }
 
-    // Update quantity field
-    document.getElementById(identifier).querySelector('span.qty').textContent = CartService.getItemByIdentifier(identifier).quantity;
+  // Update quantity field
+  document.getElementById(identifier).querySelector('span.qty').textContent = CartService.getItemByIdentifier(identifier).quantity;
 
-    // Regenerate the summary
-    renderHTMLSummary(CartService.getSummary());
+  // Regenerate the summary
+  renderHTMLSummary(CartService.getSummary());
 
-    // Reactivate buttons
-    _toggleChildButtons(target.parentElement);
-}
-
-/**
- * Enable / Disable .btn child elements from a target
- *
- * When the user click on increase or decrease button from the cart page, we need to disable the buttons
- * to prevent spam until the process is terminated
- * @param target
- * @private
- */
-function _toggleChildButtons(target) {
-    Array.from(target.getElementsByClassName('btn')).forEach(element => {
-        if (element.classList.contains('disabled')) {
-            element.classList.remove('disabled')
-        } else {
-            element.classList.add('disabled');
-        }
-    })
+  // Reactivate buttons
+  _toggleChildButtons(target.parentElement);
 }
 
 /**
@@ -120,54 +120,57 @@ function _toggleChildButtons(target) {
  * @private
  */
 function _setError(fieldNode, message) {
+  const feedbackId = `${fieldNode.id}-feedback`;
+  const feedbackElt = document.getElementById(feedbackId);
 
-    const feedbackId = fieldNode.id + '-feedback';
-    const feedbackElt = document.getElementById(feedbackId);
+  if (!feedbackElt) {
+    const errFeedbackElt = document.createElement('div');
+    errFeedbackElt.classList.add('invalid-feedback');
+    errFeedbackElt.id = `${fieldNode.id}-feedback`;
+    errFeedbackElt.textContent = message;
 
-    if (!feedbackElt) {
-        let errFeedbackElt = document.createElement('div');
-        errFeedbackElt.classList.add('invalid-feedback');
-        errFeedbackElt.id = fieldNode.id + '-feedback';
-        errFeedbackElt.textContent = message;
+    fieldNode.parentNode.append(errFeedbackElt);
+  }
 
-        fieldNode.parentNode.append(errFeedbackElt);
-    }
+  if (feedbackElt && message !== feedbackElt.textContent) {
+    feedbackElt.textContent = message;
+  }
 
-    if (feedbackElt && message !== feedbackElt.textContent) {
-        feedbackElt.textContent = message;
-    }
-
-    fieldNode.setCustomValidity(message);
+  fieldNode.setCustomValidity(message);
 }
 
+/**
+ * Process the form submission
+ * @param form
+ * @return {Promise<void>}
+ */
 async function formProcess(form) {
-    form.classList.add('was-validated');
+  form.classList.add('was-validated');
 
-    let formData = {}
-    Object.assign(formData, {
-        contact: {
-            firstName: document.getElementById('firstname').value.trim(),
-            lastName: document.getElementById('lastname').value.trim(),
-            address: document.getElementById('address').value.trim(),
-            city: document.getElementById('city').value.trim(),
-            email: document.getElementById('email').value.trim(),
-        }
-    })
+  const formData = {};
+  Object.assign(formData, {
+    contact: {
+      firstName: document.getElementById('firstname').value.trim(),
+      lastName: document.getElementById('lastname').value.trim(),
+      address: document.getElementById('address').value.trim(),
+      city: document.getElementById('city').value.trim(),
+      email: document.getElementById('email').value.trim(),
+    },
+  });
 
-    let responses = [];
-    for (const [type, products] of Object.entries(CartService.getProductsSortedByType())) {
+  let responses = [];
+  for (const [type, products] of Object.entries(CartService.getProductsSortedByType())) {
+    const response = await sendOrder(type, { ...formData, products });
 
-        const response = await sendOrder(type, {...formData, products: products});
-
-        if (response.status !== 201) {
-            throw new Error();
-        }
-
-        responses = [...responses, await response.json()];
+    if (response.status !== 201) {
+      throw new Error();
     }
 
-    localStorage.setItem('order-confirmation', JSON.stringify(responses));
-    CartService.clearCart();
+    responses = [...responses, await response.json()];
+  }
+
+  localStorage.setItem('order-confirmation', JSON.stringify(responses));
+  CartService.clearCart();
 }
 
 /**
@@ -177,159 +180,147 @@ async function formProcess(form) {
  * @private
  */
 function _validateInput(fieldNode, value) {
+  let err = false;
 
-    let err = false;
-
-    if (value.length < 1) {
-
-        err = true;
-        _setError(fieldNode, "Ne doit pas être vide");
-
-    } else {
-
-        switch (fieldNode.id) {
-            case 'email':
-                if (value.length > 20) {
-                    err = true;
-                    _setError(fieldNode, "Ne peut exceder 20 caractères");
-
-                } else if (!Validator.isValidEmail(value)) {
-                    err = true;
-                    _setError(fieldNode, "Format invalide");
-                }
-
-                break;
-
-            case 'firstname':
-            case 'lastname':
-                if (value.length > 15) {
-                    err = true;
-                    _setError(fieldNode, "Ne peut exceder 15 caractères");
-
-                } else if (!Validator.isValidName(value)) {
-                    err = true;
-                    _setError(fieldNode, "Contient des caractères invalides");
-                }
-
-                break;
-
-            case 'address':
-                if (value.length < 5) {
-                    err = true;
-                    _setError(fieldNode, "L'adresse est trop courte");
-
-                } else if (value.length > 50) {
-                    err = true;
-                    _setError(fieldNode, "Ne peut exceder 50 caractères");
-
-                } else {
-                    if (!Validator.isValidAddress(value)) {
-                        err = true;
-                        _setError(fieldNode, "Contient des caractères invalides.");
-                    }
-                }
-
-                break;
-
-            case 'city':
-                if (value.length > 30) {
-                    err = true;
-                    _setError(fieldNode, "Ne peut exceder 30 caractères");
-                } else if (!Validator.isValidCity(value)) {
-                    err = true;
-                    _setError(fieldNode, "Contient des caractères invalides");
-                }
-
-                break;
-
-            default:
-                break;
+  if (value.length < 1) {
+    err = true;
+    _setError(fieldNode, 'Ne doit pas être vide');
+  } else {
+    switch (fieldNode.id) {
+      case 'email':
+        if (value.length > 20) {
+          err = true;
+          _setError(fieldNode, 'Ne peut exceder 20 caractères');
+        } else if (!Validator.isValidEmail(value)) {
+          err = true;
+          _setError(fieldNode, 'Format invalide');
         }
 
-    }
+        break;
 
-    if (!err) {
-        fieldNode.setCustomValidity('');
+      case 'firstname':
+      case 'lastname':
+        if (value.length > 15) {
+          err = true;
+          _setError(fieldNode, 'Ne peut exceder 15 caractères');
+        } else if (!Validator.isValidName(value)) {
+          err = true;
+          _setError(fieldNode, 'Contient des caractères invalides');
+        }
+
+        break;
+
+      case 'address':
+        if (value.length < 5) {
+          err = true;
+          _setError(fieldNode, "L'adresse est trop courte");
+        } else if (value.length > 50) {
+          err = true;
+          _setError(fieldNode, 'Ne peut exceder 50 caractères');
+        } else if (!Validator.isValidAddress(value)) {
+          err = true;
+          _setError(fieldNode, 'Contient des caractères invalides.');
+        }
+
+        break;
+
+      case 'city':
+        if (value.length > 30) {
+          err = true;
+          _setError(fieldNode, 'Ne peut exceder 30 caractères');
+        } else if (!Validator.isValidCity(value)) {
+          err = true;
+          _setError(fieldNode, 'Contient des caractères invalides');
+        }
+
+        break;
+
+      default:
+        break;
     }
+  }
+
+  if (!err) {
+    fieldNode.setCustomValidity('');
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('.needs-validation');
+  const inputs = form.querySelectorAll('input');
 
-    const form = document.querySelector('.needs-validation');
-    const inputs = form.querySelectorAll('input');
+  inputs.forEach((field) => {
+    // When the user write in an input, validate the entry
+    field.addEventListener('input', (e) => {
+      const value = e.target.value.trim();
 
-    inputs.forEach((field) => {
-        // When the user write in an input, validate the entry
-        field.addEventListener('input', (e) => {
-            const value = e.target.value.trim();
+      form.classList.add('was-validated');
+      _validateInput(e.target, value);
 
-            form.classList.add('was-validated');
-            _validateInput(e.target, value);
+      const submitBtnElt = document.getElementById('submit');
+      submitBtnElt.disabled = !form.checkValidity();
+    });
+  });
 
-            let submitBtnElt = document.getElementById('submit');
-            submitBtnElt.disabled = !form.checkValidity();
-        });
-    })
+  // Handle form submission
+  form.addEventListener('submit', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
 
-    // Handle form submission
-    form.addEventListener('submit', function (e) {
+    if (form.checkValidity()) {
+      formProcess(form).then(() => {
+        window.location.assign('/pages/order-confirmation.html');
+      }).catch((err) => {
+        console.error(err);
+      });
+    }
+  });
+
+  const cartListElement = document.getElementById('cart-list');
+
+  // List products in cart
+  for (const [identifier, item] of Object.entries(CartService.getAll())) {
+    cartItems.push(renderHTMLCartItem(identifier, item));
+  }
+
+  if (cartItems.length > 0) {
+    cartListElement.innerHTML += cartItems.join('');
+  } else {
+    renderHTMLNoProductInCart();
+  }
+
+  renderHTMLSummary(CartService.getSummary());
+
+  // Handle remove product from cart
+  Array.from(document.getElementsByClassName('cart-trash')).forEach(
+    (trashButton) => {
+      trashButton.addEventListener('click', (e) => {
         e.stopPropagation();
-        e.preventDefault();
 
-        if (form.checkValidity()) {
-            formProcess(form).then(() => {
-                window.location.assign('/pages/order-confirmation.html');
-            }).catch((err) => {
-                console.error(err);
-            });
+        const identifier = e.currentTarget.getAttribute('data-delete');
+
+        document.getElementById(identifier).remove();
+        CartService.removeFromCart(identifier);
+
+        if (CartService.count() < 1) {
+          renderHTMLNoProductInCart();
         }
-    })
 
-    let cartListElement = document.getElementById('cart-list');
+        renderHTMLSummary(CartService.getSummary());
+      });
+    },
+  );
 
-    // List products in cart
-    for (const [identifier, item] of Object.entries(CartService.getAll())) {
-        cartItems.push(renderHTMLCartItem(identifier, item));
-    }
+  // Handle quantity update click
+  Array.from(document.querySelectorAll('.cart-update-quantity > .btn')).forEach((updateQtyButton) => {
+    updateQtyButton.addEventListener('click', (e) => {
+      e.stopPropagation();
 
-    if (cartItems.length > 0) {
-        cartListElement.innerHTML += cartItems.join('');
-    } else {
-        renderHTMLNoProductInCart();
-    }
+      const dataAction = e.currentTarget.getAttribute('data-action');
 
-    renderHTMLSummary(CartService.getSummary());
-
-    // Handle remove product from cart
-    Array.from(document.getElementsByClassName('cart-trash')).forEach(
-        (trashButton) => {
-            trashButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-
-                const identifier = e.currentTarget.getAttribute('data-delete')
-
-                document.getElementById(identifier).remove();
-                CartService.removeFromCart(identifier);
-
-                if (CartService.count() < 1) {
-                    renderHTMLNoProductInCart();
-                }
-
-                renderHTMLSummary(CartService.getSummary());
-            })
-        }
-    )
-
-    // Handle quantity update click
-    Array.from(document.querySelectorAll('.cart-update-quantity > .btn')).forEach(updateQtyButton => {
-        updateQtyButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-
-            const dataAction = e.currentTarget.getAttribute('data-action');
-
-            if (dataAction) {
-                processUpdateQuantity(dataAction, e.currentTarget);
-            }
-        })
-    })
+      if (dataAction) {
+        processUpdateQuantity(dataAction, e.currentTarget);
+      }
+    });
+  });
 });

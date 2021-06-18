@@ -4,7 +4,7 @@
  * @return {boolean}
  */
 export function isValidEmail(str) {
-  const regex = new RegExp(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/i);
+  const regex = new RegExp(/^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/i);
   return !!str.match(regex);
 }
 
@@ -28,7 +28,7 @@ export function isValidAddress(str) {
  * @return {boolean}
  */
 export function isValidName(str) {
-  const regex = new RegExp(/^(?:(?:[\wéè]+[\s|\'|\-])*)[a-zA-Zéè]+$/i);
+  const regex = new RegExp(/^(?:(?:[\wéè]+[\s|'-])*)[a-zA-Zéè]+$/i);
   return !!str.match(regex);
 }
 
@@ -40,7 +40,7 @@ export function isValidName(str) {
  * @return {boolean}
  */
 export function isValidCity(str) {
-  const regex = new RegExp(/^(?:(?:[\w\déè]+[\s|\'|\-|\_])*)[a-zA-Zéè]+$/i);
+  const regex = new RegExp(/^(?:(?:[\w\déè]+[\s|'\-_])*)[a-zA-Zéè]+$/i);
   return !!str.match(regex);
 }
 

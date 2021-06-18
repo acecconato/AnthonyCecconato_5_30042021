@@ -4,6 +4,12 @@ import { formatPriceToEur } from './services/CartService';
 
 let products = [];
 
+/**
+ * Render HTML product
+ * @param product
+ * @param type
+ * @return {string}
+ */
 function renderHTMLProduct(product, type) {
   return `
         <article data-id="${product._id}" class="col-12 col-md-6 col-xl-3 d-flex flex-column justify-content-between mx-auto mx-lg-0">
@@ -24,6 +30,10 @@ function renderHTMLProduct(product, type) {
     `;
 }
 
+/**
+ * Render HTML loading spinner
+ * @param element
+ */
 function renderHTMLLoading(element) {
   element.innerHTML += `
         <div class="spinner">
