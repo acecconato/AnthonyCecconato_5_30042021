@@ -19,6 +19,11 @@
   article {
     margin-bottom: 45px;
 
+    img {
+      height: 300px;
+      object-fit: cover;
+    }
+
     h3 {
       margin-top: 15px;
       @include font-size(1.3rem);
@@ -37,6 +42,16 @@
 
       &.product-price {
         text-align: right;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up('xl') {
+  #product-list {
+    article {
+      img {
+        height: 180px;
       }
     }
   }
