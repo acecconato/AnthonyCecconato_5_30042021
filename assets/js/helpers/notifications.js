@@ -1,8 +1,12 @@
-import config from "../config/config";
-import {Toast} from "bootstrap";
+import { Toast } from 'bootstrap';
 
+import config from '../config/config';
+
+/**
+ * Render HTML notification when adding a product to the cart
+ */
 export function renderAddToCartNotification() {
-    document.getElementById('toast-container').innerHTML = `
+  document.getElementById('toast-container').innerHTML = `
         <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-body">
                 Article ajouté dans le panier
@@ -12,6 +16,10 @@ export function renderAddToCartNotification() {
                 </div>
             </div>
         </div>
-    `
-    new Toast(document.querySelector('#toast')).show();
+    `;
+  new Toast(document.querySelector('#toast')).show();
 }
+
+export default {
+  renderAddToCartNotification,
+};
