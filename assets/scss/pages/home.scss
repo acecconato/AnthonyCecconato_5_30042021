@@ -1,6 +1,13 @@
 @import "../main.scss";
 
 #product-list {
+
+  position: relative;
+
+  &::before {
+    @include skewDivider();
+  }
+
   .filter {
     padding-left: 0;
 
@@ -11,6 +18,11 @@
 
   article {
     margin-bottom: 45px;
+
+    img {
+      height: 300px;
+      object-fit: cover;
+    }
 
     h3 {
       margin-top: 15px;
@@ -30,6 +42,16 @@
 
       &.product-price {
         text-align: right;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up('xl') {
+  #product-list {
+    article {
+      img {
+        height: 180px;
       }
     }
   }

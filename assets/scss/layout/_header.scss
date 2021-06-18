@@ -8,6 +8,10 @@ nav {
     i {
       @include font-size(2rem);
     }
+
+    img {
+      height: 75px;
+    }
   }
 }
 
