@@ -73,4 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
             productListItemsElement.innerHTML = `<p class="alert alert-danger">Une erreur est survenue lors de la récupération des produits</p>`
         }
     })
+
+    document.querySelector('.btn-orinoco[data-type]').click();
 })
