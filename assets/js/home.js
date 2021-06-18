@@ -1,11 +1,11 @@
-import config from './config/config.js';
-import {loadObjectsFromApi} from "./services/api";
-import {formatPriceToEur} from "./services/CartService";
+import config from './config/config';
+import { loadObjectsFromApi } from './services/api';
+import { formatPriceToEur } from './services/CartService';
 
 let products = [];
 
 function renderHTMLProduct(product, type) {
-    return `
+  return `
         <article data-id="${product._id}" class="col-12 col-md-6 col-xl-3 d-flex flex-column justify-content-between mx-auto mx-lg-0">
             <img src="${product.imageUrl}" alt="">
             <h3>${product.name}</h3>
@@ -25,7 +25,7 @@ function renderHTMLProduct(product, type) {
 }
 
 function renderHTMLLoading(element) {
-    element.innerHTML += `
+  element.innerHTML += `
         <div class="spinner">
             <div class="bounce1"></div>
             <div class="bounce2"></div>
@@ -35,44 +35,44 @@ function renderHTMLLoading(element) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('home-load-products').addEventListener('click', async (e) => {
-        if (!e.target.hasAttribute('data-type')) {
-            return;
+  document.getElementById('home-load-products').addEventListener('click', async (e) => {
+    if (!e.target.hasAttribute('data-type')) {
+      return;
+    }
+
+    const productListItemsElement = document.getElementById('product-list-items');
+
+    /* Reset products list */
+    productListItemsElement.innerHTML = '';
+    products = [];
+
+    /* Toggle loading animation */
+    renderHTMLLoading(productListItemsElement);
+
+    /* Get products from the API filtered by the desired type */
+    const type = e.target.getAttribute('data-type');
+
+    try {
+      const objects = await loadObjectsFromApi(type);
+
+      objects.forEach((product) => {
+        products.push(renderHTMLProduct(product, type));
+      });
+
+      /* Timeout is only for demo purposes */
+      setTimeout(() => {
+        /* Display loaded products, or a message */
+        if (products.length > 0) {
+          productListItemsElement.innerHTML = products.join('');
+        } else {
+          productListItemsElement.innerHTML = '<p class="alert alert-warning">Aucun produit trouvé</p>';
         }
+      }, 300);
+    } catch (err) {
+      console.error(err);
+      productListItemsElement.innerHTML = '<p class="alert alert-danger">Une erreur est survenue lors de la récupération des produits</p>';
+    }
+  });
 
-        let productListItemsElement = document.getElementById('product-list-items');
-
-        /* Reset products list */
-        productListItemsElement.innerHTML = '';
-        products = [];
-
-        /* Toggle loading animation */
-        renderHTMLLoading(productListItemsElement);
-
-        /* Get products from the API filtered by the desired type */
-        const type = e.target.getAttribute('data-type');
-
-        try {
-            const objects = await loadObjectsFromApi(type);
-
-            objects.forEach((product) => {
-                products.push(renderHTMLProduct(product, type));
-            });
-
-            /* Timeout is only for demo purposes */
-            setTimeout(() => {
-                /* Display loaded products, or a message */
-                if (products.length > 0) {
-                    productListItemsElement.innerHTML = products.join('');
-                } else {
-                    productListItemsElement.innerHTML = `<p class="alert alert-warning">Aucun produit trouvé</p>`
-                }
-            }, 300)
-        } catch (e) {
-            console.error(e);
-            productListItemsElement.innerHTML = `<p class="alert alert-danger">Une erreur est survenue lors de la récupération des produits</p>`
-        }
-    })
-
-    document.querySelector('.btn-orinoco[data-type]').click();
-})
+  document.querySelector('.btn-orinoco[data-type]').click();
+});

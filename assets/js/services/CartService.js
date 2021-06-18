@@ -1,141 +1,143 @@
+/**
+ * Format a number to the EUROS price format
+ * @param {number} price
+ * @return {string}
+ */
+export function formatPriceToEur(price) {
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
+}
+
 class CartService {
+  constructor() {
+    this.cart = (localStorage.getItem('cart')) ? JSON.parse(localStorage.getItem('cart')) : {};
+  }
 
-    constructor() {
-        this.cart = (localStorage.getItem('cart')) ? JSON.parse(localStorage.getItem('cart')) : {};
-    }
-
-    /**
+  /**
      * Add an item to the cart
      * @param {object} item
      */
-    addToCart(item) {
+  addToCart(item) {
+    item.identifier = this.generateIdentifierFromString(`${item._id}-${item.selectedOption}`);
 
-        item.identifier = this.generateIdentifierFromString(item._id + '-' + item.selectedOption);
+    if (this.cart[item.identifier]) {
+      this.updateQuantity(item.identifier, parseInt(item.quantity));
+    } else {
+      this.cart[item.identifier] = {
+        _id: item._id,
+        type: item.type,
+        name: item.name,
+        description: item.description,
+        imageUrl: item.imageUrl,
+        option_key: item.option_key,
+        price: item.price,
+        displayPrice: formatPriceToEur(item.price / 100),
+        quantity: item.quantity,
+        selectedOption: item.selectedOption,
+      };
 
-        if (this.cart.hasOwnProperty(item.identifier)) {
-
-            this.updateQuantity(item.identifier, parseInt(item.quantity));
-
-        } else {
-
-            this.cart[item.identifier] = {
-                _id: item._id,
-                type: item.type,
-                name: item.name,
-                description: item.description,
-                imageUrl: item.imageUrl,
-                option_key: item.option_key,
-                price: item.price,
-                displayPrice: formatPriceToEur(item.price / 100),
-                quantity: item.quantity,
-                selectedOption: item.selectedOption
-            };
-
-            this.updateCartCount();
-        }
-
-        this.persistCart();
+      this.updateCartCount();
     }
 
-    /**
+    this.persistCart();
+  }
+
+  /**
      * Remove an item from the cart
      * @param {string} identifier
      */
-    removeFromCart(identifier) {
-
-        if (this.cart.hasOwnProperty(identifier)) {
-            delete this.cart[identifier];
-            localStorage.setItem('cart', JSON.stringify(this.cart));
-        }
-
-        this.updateCartCount();
+  removeFromCart(identifier) {
+    if (this.cart[identifier]) {
+      delete this.cart[identifier];
+      localStorage.setItem('cart', JSON.stringify(this.cart));
     }
 
-    /**
+    this.updateCartCount();
+  }
+
+  /**
      * Return the cart
      * @return {object|{}}
      */
-    getAll() {
-        return this.cart;
-    }
+  getAll() {
+    return this.cart;
+  }
 
-    /**
+  /**
      *
      * @param {string} identifier
      * @return {Object|null}
      */
-    getItemByIdentifier(identifier) {
-        return this.cart[identifier] ?? null;
-    }
+  getItemByIdentifier(identifier) {
+    return this.cart[identifier] ?? null;
+  }
 
-    /**
+  /**
      * Return the number of cart's item
      * @return {number}
      */
-    count() {
-        return Object.keys(this.cart).length;
-    }
+  count() {
+    return Object.keys(this.cart).length;
+  }
 
-    /**
+  /**
      * Read the cart to return a summary
      * @return {{delivery: string, totalTTC: string, vat: string, totalWT: string, nbItems: number}}
      */
-    getSummary() {
-        const prices = Object.values(this.cart).map(item => item.price * item.quantity);
+  getSummary() {
+    const prices = Object.values(this.cart).map((item) => item.price * item.quantity);
 
-        return {
-            nbItems: Object.keys(this.cart).length,
-            delivery: 'Gratuite',
-            totalTTC: formatPriceToEur(prices.reduce((a, b) => a + b, 0) / 100),
-            totalWT: formatPriceToEur(prices.reduce((a, b) => a + b, 0) / 100 * 0.80),
-            vat: '20%'
-        };
-    }
+    return {
+      nbItems: Object.keys(this.cart).length,
+      delivery: 'Gratuite',
+      totalTTC: formatPriceToEur(prices.reduce((a, b) => a + b, 0) / 100),
+      totalWT: formatPriceToEur((prices.reduce((a, b) => a + b, 0) / 100) * 0.80),
+      vat: '20%',
+    };
+  }
 
-    /**
+  /**
      * Clear the cart
      * @return {void}
      */
-    clearCart() {
-        this.cart = {};
-        localStorage.removeItem('cart');
+  clearCart() {
+    this.cart = {};
+    localStorage.removeItem('cart');
 
-        document.getElementById('cart-count').innerText = '0';
+    document.getElementById('cart-count').innerText = '0';
 
-        this.persistCart();
-    }
+    this.persistCart();
+  }
 
-    /**
+  /**
      * Update a product's quantity in the cart based on his identifier
      * @param {string} identifier
      * @param {number} quantity
      */
-    updateQuantity(identifier, quantity) {
-
-        if (this.cart.hasOwnProperty(identifier)) {
-            this.cart[identifier].quantity = parseInt(this.cart[identifier].quantity) + quantity;
-            this.persistCart();
-        }
+  updateQuantity(identifier, quantity) {
+    if (this.cart[identifier]) {
+      this.cart[identifier].quantity = parseInt(this.cart[identifier].quantity) + quantity;
+      this.persistCart();
     }
+  }
 
-    /**
+  /**
      * Generate a unique id based on the product _id and the selected option.
      * @param {string} str
      * @returns {string}
      */
-    generateIdentifierFromString(str) {
-        return str.toLowerCase().replace(/\s/g, '');
-    }
+  generateIdentifierFromString(str) {
+    return str.toLowerCase().replace(/\s/g, '');
+  }
 
-    /**
+  /**
      * Update the cart-count element (Actually inside the top menu)
      * @return {void}
      */
-    updateCartCount() {
-        document.getElementById('cart-count').textContent = Object.keys(this.cart).length.toString();
-    }
+  updateCartCount() {
+    document.getElementById('cart-count').textContent = Object.keys(this.cart).length.toString();
+  }
 
-    /**
+  /**
      * Sort products by type and quantity
      * e.g {
      *       "teddies": [
@@ -151,46 +153,33 @@ class CartService {
      *   }
      * @return {Object}
      */
-    getProductsSortedByType() {
-        let sortedProducts = {};
+  getProductsSortedByType() {
+    const sortedProducts = {};
 
-        Object.values(this.cart).forEach((item) => {
+    Object.values(this.cart).forEach((item) => {
+      if (sortedProducts[item.type]) {
+        for (let i = 0; i < item.quantity; i++) {
+          sortedProducts[item.type].push(item._id);
+        }
+      } else {
+        sortedProducts[item.type] = [];
 
-            if (sortedProducts.hasOwnProperty(item.type)) {
+        for (let i = 0; i < item.quantity; i += 1) {
+          sortedProducts[item.type].push(item._id);
+        }
+      }
+    });
 
-                for (let i = 0; i < item.quantity; i++) {
-                    sortedProducts[item.type].push(item._id);
-                }
+    return sortedProducts;
+  }
 
-            } else {
-
-                sortedProducts[item.type] = [];
-
-                for (let i = 0; i < item.quantity; i++) {
-                    sortedProducts[item.type].push(item._id);
-                }
-            }
-        })
-
-        return sortedProducts;
-    }
-
-    /**
+  /**
      * Persist the cart in the localStorage
      * @return {void}
      */
-    persistCart() {
-        localStorage.setItem('cart', JSON.stringify(this.cart));
-    }
-}
-
-/**
- * Format a number to the EUROS price format
- * @param {number} price
- * @return {string}
- */
-export function formatPriceToEur(price) {
-    return new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(price);
+  persistCart() {
+    localStorage.setItem('cart', JSON.stringify(this.cart));
+  }
 }
 
 /**
@@ -198,13 +187,12 @@ export function formatPriceToEur(price) {
  * @param {array} products
  */
 export function getTotalTTCFromProductList(products) {
-    let totalTTC = 0;
-    products.forEach((product) => {
-        totalTTC += product.price;
-    });
+  let totalTTC = 0;
+  products.forEach((product) => {
+    totalTTC += product.price;
+  });
 
-    return formatPriceToEur(totalTTC / 100);
+  return formatPriceToEur(totalTTC / 100);
 }
 
 export default new CartService();
-
