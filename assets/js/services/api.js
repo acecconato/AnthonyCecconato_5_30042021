@@ -27,3 +27,30 @@ export const loadObjectsFromApi = async (type) => {
 
     return response.json();
 }
+
+export const sendOrder = async (type, data) => {
+    let endpoint = config.apiUrl;
+
+    switch (type) {
+        case 'teddies':
+            endpoint += '/teddies/order';
+            break;
+        case 'cameras':
+            endpoint += '/cameras/order';
+            break;
+        case 'furniture':
+            endpoint += '/furniture/order';
+            break;
+        default:
+            throw new Error('Invalid type');
+    }
+
+    return await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+}

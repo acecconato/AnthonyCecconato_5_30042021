@@ -10,20 +10,30 @@
 
     &:hover {
       background: white;
+      color: black;
     }
   }
 
   &-image {
     width: 50%;
     max-width: 50%;
+    height: 100%;
     object-position: center;
     object-fit: cover;
+
+
+    &:hover {
+      cursor: pointer;
+      object-fit: contain;
+    }
   }
 
   &-customization, &-quantity {
-    font-style: italic;
-    margin: 0;
-    line-height: 1;
+    text-transform: capitalize;
+  }
+
+  &-update-quantity {
+    margin-left: 5px;
   }
 
   &-description {

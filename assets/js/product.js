@@ -2,7 +2,7 @@ import {Tooltip, Toast, Popover} from "bootstrap";
 
 import config from "./config/config.js";
 import {loadObjectByIdAndType} from "./services/api";
-import CartService from "./services/CartService";
+import CartService, {formatPriceToEur} from "./services/CartService";
 import {renderAddToCartNotification} from "./helpers/notifications";
 
 const queryString = window.location.search;
@@ -26,7 +26,7 @@ function renderHTMLSingleProduct(product) {
         <section class="row">
             <div class="col-12 col-md-6 position-relative overflow-hidden">
                 <img class="product-image img-thumbnail" src="${product.imageUrl}" alt="">
-                <p class="product-price">${product.price} €</p>
+                <p class="product-price">${formatPriceToEur(product.price / 100)}</p>
             </div>
             <div class="col-12 col-md-6">
                 <h1 class="mt-3">${product.name}</h1>
@@ -54,6 +54,8 @@ function renderHTMLSingleProduct(product) {
                             </div>
                         </div>
                     </fieldset>
+    
+                    <input type="hidden" name="type" id="type" value="${product.type}">
 
                     <button type="submit" class="btn btn-orinoco">Ajouter au panier</button>
                 </form>
@@ -73,8 +75,7 @@ function handleSubmit(e, product) {
     product.selectedOption = document.getElementById('options').value;
     product.quantity = document.getElementById('quantity').value;
 
-    let cartService = new CartService();
-    cartService.addToCart(product);
+    CartService.addToCart(product);
 
     renderAddToCartNotification();
 }
@@ -97,6 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         let product = await loadObjectByIdAndType(idProduct, type);
         product.option_key = await getCustomizationOptionsByType(type);
+        product.type = type;
 
         document.title = product.name + ' - Vendu par Orinoco';
         document.querySelector('meta[name="description"]').setAttribute("content", product.description);
