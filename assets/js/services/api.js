@@ -69,5 +69,5 @@ export const sendOrder = async (type, data) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  });
+  }).catch((err) => console.log(err));
 };
