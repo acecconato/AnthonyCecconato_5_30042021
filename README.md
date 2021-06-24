@@ -3,6 +3,9 @@
 [![DeepScan grade](https://deepscan.io/api/teams/14397/projects/17524/branches/404625/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=14397&pid=17524&bid=404625)
 [![Known Vulnerabilities](https://snyk.io/test/github/acecconato/AnthonyCecconato_5_30042021/badge.svg)](https://snyk.io/test/github/acecconato/AnthonyCecconato_5_30042021)
 
+Online Orinoco demo: [dw05.anthony-cecconato.fr](https://dw05.anthony-cecconato.fr/) \
+Online API: [jwdp5.anthony-cecconato.fr](http://jwdp5.anthony-cecconato.fr)
+
 ## How to deploy
 
 **Requirements**
