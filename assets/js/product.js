@@ -19,9 +19,13 @@ function handleSubmit(e, product) {
   product.selectedOption = document.getElementById('options').value;
   product.quantity = document.getElementById('quantity').value;
 
-  CartService.addToCart(product);
-
-  renderAddToCartNotification();
+  try {
+    CartService.addToCart(product);
+    renderAddToCartNotification();
+  } catch (err) {
+    console.error(err);
+    document.querySelector('#single-product > .container').innerHTML = "<p class='alert alert-danger'>Impossible d'ajouter le produit au panier</p>";
+  }
 }
 
 /**

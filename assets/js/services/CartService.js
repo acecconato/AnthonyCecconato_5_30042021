@@ -4,7 +4,10 @@
  * @return {string}
  */
 export function formatPriceToEur(price) {
-  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR'
+  }).format(price);
 }
 
 class CartService {
@@ -15,8 +18,17 @@ class CartService {
   /**
    * Add an item to the cart
    * @param {object} item
+   * @throws Error
    */
   addToCart(item) {
+    if (typeof item !== 'object') {
+      throw new Error(`Object expected, ${typeof item} received`);
+    }
+
+    if (!item._id || !item.selectedOption) {
+      throw new Error('Invalid item');
+    }
+
     item.identifier = this.generateIdentifierFromString(`${item._id}-${item.selectedOption}`);
 
     if (this.cart[item.identifier]) {
@@ -84,7 +96,8 @@ class CartService {
    * @return {{delivery: string, totalTTC: string, vat: string, totalWT: string, nbItems: number}}
    */
   getSummary() {
-    const prices = Object.values(this.cart).map((item) => item.price * item.quantity);
+    const prices = Object.values(this.cart)
+      .map((item) => item.price * item.quantity);
 
     return {
       nbItems: Object.keys(this.cart).length,
@@ -114,10 +127,12 @@ class CartService {
    * @param {number} quantity
    */
   updateQuantity(identifier, quantity) {
-    if (this.cart[identifier]) {
-      this.cart[identifier].quantity = parseInt(this.cart[identifier].quantity) + quantity;
-      this.persistCart();
+    if (!this.cart[identifier] || !this.cart[identifier].length < 1) {
+      throw new Error(`Can't load the cart item with the ${identifier} identifier`);
     }
+
+    this.cart[identifier].quantity = parseInt(this.cart[identifier].quantity) + quantity;
+    this.persistCart();
   }
 
   /**
@@ -126,7 +141,8 @@ class CartService {
    * @returns {string}
    */
   generateIdentifierFromString(str) {
-    return str.toLowerCase().replace(/\s/g, '');
+    return str.toLowerCase()
+      .replace(/\s/g, '');
   }
 
   /**
@@ -134,7 +150,9 @@ class CartService {
    * @return {void}
    */
   updateCartCount() {
-    document.getElementById('cart-count').textContent = Object.keys(this.cart).length.toString();
+    document.getElementById('cart-count').textContent = Object.keys(this.cart)
+      .length
+      .toString();
   }
 
   /**
@@ -156,19 +174,20 @@ class CartService {
   getProductsSortedByType() {
     const sortedProducts = {};
 
-    Object.values(this.cart).forEach((item) => {
-      if (sortedProducts[item.type]) {
-        for (let i = 0; i < item.quantity; i++) {
-          sortedProducts[item.type].push(item._id);
-        }
-      } else {
-        sortedProducts[item.type] = [];
+    Object.values(this.cart)
+      .forEach((item) => {
+        if (sortedProducts[item.type]) {
+          for (let i = 0; i < item.quantity; i++) {
+            sortedProducts[item.type].push(item._id);
+          }
+        } else {
+          sortedProducts[item.type] = [];
 
-        for (let i = 0; i < item.quantity; i += 1) {
-          sortedProducts[item.type].push(item._id);
+          for (let i = 0; i < item.quantity; i += 1) {
+            sortedProducts[item.type].push(item._id);
+          }
         }
-      }
-    });
+      });
 
     return sortedProducts;
   }
@@ -178,6 +197,10 @@ class CartService {
    * @return {void}
    */
   persistCart() {
+    if (!this.cart) {
+      throw new Error('Cart object doesn\'t exists');
+    }
+
     localStorage.setItem('cart', JSON.stringify(this.cart));
   }
 }

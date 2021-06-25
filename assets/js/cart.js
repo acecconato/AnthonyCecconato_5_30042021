@@ -1,4 +1,4 @@
-import {Tooltip, Toast, Popover} from 'bootstrap';
+import { Tooltip, Toast, Popover } from 'bootstrap';
 
 import CartService from './services/CartService';
 import Validator from './services/Validator';
@@ -15,13 +15,14 @@ const cartItems = [];
  * @private
  */
 function _toggleChildButtons(target) {
-  Array.from(target.getElementsByClassName('btn')).forEach((element) => {
-    if (element.classList.contains('disabled')) {
-      element.classList.remove('disabled');
-    } else {
-      element.classList.add('disabled');
-    }
-  });
+  Array.from(target.getElementsByClassName('btn'))
+    .forEach((element) => {
+      if (element.classList.contains('disabled')) {
+        element.classList.remove('disabled');
+      } else {
+        element.classList.add('disabled');
+      }
+    });
 }
 
 /**
@@ -83,7 +84,22 @@ function renderHTMLSummary(summary) {
  */
 function renderHTMLNoProductInCart() {
   document.getElementById('cart-list').innerHTML = '<p class="alert alert-warning">Vous n\'avez pas d\'articles dans votre panier</p>';
-  document.getElementById('cart-checkout').remove();
+  document.getElementById('cart-checkout')
+    .remove();
+}
+
+/**
+ * Render HTML update quantity error
+ */
+function renderHTMLUpdateQtyError() {
+  const errElt = document.createElement('p');
+  errElt.classList.add('alert', 'alert-danger');
+  errElt.id = 'update-error';
+  errElt.textContent = 'Impossible de mettre à jour la quantité';
+  if (!document.getElementById('update-error')) {
+    document.getElementById('cart-list')
+      .prepend(errElt);
+  }
 }
 
 /**
@@ -98,15 +114,26 @@ function processUpdateQuantity(action, target) {
   const identifier = target.parentElement.getAttribute('data-product-id');
 
   if (action === 'increase' && CartService.getItemByIdentifier(identifier).quantity < 99) {
-    CartService.updateQuantity(identifier, 1);
+    try {
+      CartService.updateQuantity(identifier, 1);
+    } catch (err) {
+      console.error(err);
+      renderHTMLUpdateQtyError();
+    }
   }
 
   if (action === 'decrease' && CartService.getItemByIdentifier(identifier).quantity > 1) {
-    CartService.updateQuantity(identifier, -1);
+    try {
+      CartService.updateQuantity(identifier, -1);
+    } catch (err) {
+      console.error(err);
+      renderHTMLUpdateQtyError();
+    }
   }
 
   // Update quantity field
-  document.getElementById(identifier).querySelector('span.qty').textContent = CartService.getItemByIdentifier(identifier).quantity;
+  document.getElementById(identifier)
+    .querySelector('span.qty').textContent = CartService.getItemByIdentifier(identifier).quantity;
 
   // Regenerate the summary
   renderHTMLSummary(CartService.getSummary());
@@ -152,17 +179,30 @@ async function formProcess(form) {
   const formData = {};
   Object.assign(formData, {
     contact: {
-      firstName: document.getElementById('firstname').value.trim(),
-      lastName: document.getElementById('lastname').value.trim(),
-      address: document.getElementById('address').value.trim(),
-      city: document.getElementById('city').value.trim(),
-      email: document.getElementById('email').value.trim(),
+      firstName: document.getElementById('firstname')
+        .value
+        .trim(),
+      lastName: document.getElementById('lastname')
+        .value
+        .trim(),
+      address: document.getElementById('address')
+        .value
+        .trim(),
+      city: document.getElementById('city')
+        .value
+        .trim(),
+      email: document.getElementById('email')
+        .value
+        .trim(),
     },
   });
 
   let responses = [];
   for (const [type, products] of Object.entries(CartService.getProductsSortedByType())) {
-    const response = await sendOrder(type, { ...formData, products });
+    const response = await sendOrder(type, {
+      ...formData,
+      products
+    });
 
     if (response.status !== 201) {
       throw new Error();
@@ -215,7 +255,7 @@ function _validateInput(fieldNode, value) {
       case 'address':
         if (value.length < 5) {
           err = true;
-          _setError(fieldNode, "L'adresse est trop courte");
+          _setError(fieldNode, 'L\'adresse est trop courte');
         } else if (value.length > 50) {
           err = true;
           _setError(fieldNode, 'Ne peut exceder 50 caractères');
@@ -270,11 +310,14 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
 
     if (form.checkValidity()) {
-      formProcess(form).then(() => {
-        window.location.assign('/pages/order-confirmation.html');
-      }).catch((err) => {
-        console.error(err);
-      });
+      formProcess(form)
+        .then(() => {
+          window.location.assign('/pages/order-confirmation.html');
+        })
+        .catch((err) => {
+          console.error(err);
+          document.getElementById('cart-checkout').innerHTML = '<p class="alert alert-danger">Impossible d\'envoyer les données</p>';
+        });
     }
   });
 
@@ -294,35 +337,38 @@ document.addEventListener('DOMContentLoaded', () => {
   renderHTMLSummary(CartService.getSummary());
 
   // Handle remove product from cart
-  Array.from(document.getElementsByClassName('cart-trash')).forEach(
-    (trashButton) => {
-      trashButton.addEventListener('click', (e) => {
-        e.stopPropagation();
+  Array.from(document.getElementsByClassName('cart-trash'))
+    .forEach(
+      (trashButton) => {
+        trashButton.addEventListener('click', (e) => {
+          e.stopPropagation();
 
-        const identifier = e.currentTarget.getAttribute('data-delete');
+          const identifier = e.currentTarget.getAttribute('data-delete');
 
-        document.getElementById(identifier).remove();
-        CartService.removeFromCart(identifier);
+          document.getElementById(identifier)
+            .remove();
+          CartService.removeFromCart(identifier);
 
-        if (CartService.count() < 1) {
-          renderHTMLNoProductInCart();
-        }
+          if (CartService.count() < 1) {
+            renderHTMLNoProductInCart();
+          }
 
-        renderHTMLSummary(CartService.getSummary());
-      });
-    },
-  );
+          renderHTMLSummary(CartService.getSummary());
+        });
+      },
+    );
 
   // Handle quantity update click
-  Array.from(document.querySelectorAll('.cart-update-quantity > .btn')).forEach((updateQtyButton) => {
-    updateQtyButton.addEventListener('click', (e) => {
-      e.stopPropagation();
+  Array.from(document.querySelectorAll('.cart-update-quantity > .btn'))
+    .forEach((updateQtyButton) => {
+      updateQtyButton.addEventListener('click', (e) => {
+        e.stopPropagation();
 
-      const dataAction = e.currentTarget.getAttribute('data-action');
+        const dataAction = e.currentTarget.getAttribute('data-action');
 
-      if (dataAction) {
-        processUpdateQuantity(dataAction, e.currentTarget);
-      }
+        if (dataAction) {
+          processUpdateQuantity(dataAction, e.currentTarget);
+        }
+      });
     });
-  });
 });
