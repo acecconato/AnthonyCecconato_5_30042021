@@ -1,3 +1,5 @@
+import {Tooltip, Toast, Popover} from 'bootstrap';
+
 import config from './config/config';
 import { loadObjectByIdAndType } from './services/api';
 import CartService, { formatPriceToEur } from './services/CartService';

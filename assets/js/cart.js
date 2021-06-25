@@ -1,3 +1,5 @@
+import {Tooltip, Toast, Popover} from 'bootstrap';
+
 import CartService from './services/CartService';
 import Validator from './services/Validator';
 import { sendOrder } from './services/api';

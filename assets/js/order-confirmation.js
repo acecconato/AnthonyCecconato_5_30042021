@@ -1,3 +1,5 @@
+import {Tooltip, Toast, Popover} from 'bootstrap';
+
 import { getTotalTTCFromProductList, formatPriceToEur } from './services/CartService';
 
 /**

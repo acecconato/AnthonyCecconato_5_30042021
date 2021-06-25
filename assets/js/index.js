@@ -1,3 +1,5 @@
+import {Tooltip, Toast, Popover} from 'bootstrap';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Init cart counter
   if (localStorage.getItem('cart')) {
