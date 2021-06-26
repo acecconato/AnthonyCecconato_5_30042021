@@ -205,7 +205,7 @@ async function formProcess(form) {
     });
 
     if (response.status !== 201) {
-      throw new Error();
+      throw new Error('Something went wrong in the POST request');
     }
 
     responses = [...responses, await response.json()];
