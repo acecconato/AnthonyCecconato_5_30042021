@@ -32,7 +32,9 @@ class CartService {
     item.identifier = this.generateIdentifierFromString(`${item._id}-${item.selectedOption}`);
 
     if (this.cart[item.identifier]) {
+
       this.updateQuantity(item.identifier, parseInt(item.quantity));
+
     } else {
       this.cart[item.identifier] = {
         _id: item._id,
@@ -50,12 +52,7 @@ class CartService {
       this.updateCartCount();
     }
 
-    let err;
-    err = this.persistCart().catch((err) => err);
-
-    if (err) {
-      throw new Error(err);
-    }
+    this.persistCart();
   }
 
   /**
@@ -123,12 +120,7 @@ class CartService {
 
     document.getElementById('cart-count').innerText = '0';
 
-    let err;
-    err = this.persistCart().catch((err) => err);
-
-    if (err) {
-      throw new Error(err);
-    }
+    this.persistCart();
   }
 
   /**
@@ -138,18 +130,13 @@ class CartService {
    */
   updateQuantity(identifier, quantity) {
 
-    if (!this.cart[identifier] || !this.cart[identifier].length < 1) {
+    if (!this.cart[identifier] || this.cart[identifier].length < 1) {
       throw new Error(`Can't load the cart item with the ${identifier} identifier`);
     }
 
     this.cart[identifier].quantity = parseInt(this.cart[identifier].quantity) + quantity;
 
-    let err;
-    err = this.persistCart().catch((err) => err);
-
-    if (err) {
-      throw new Error(err);
-    }
+    this.persistCart();
   }
 
   /**
@@ -211,11 +198,10 @@ class CartService {
 
   /**
    * Persist the cart in the localStorage
-   * @returns {Promise<void>}
    * @throws {ReferenceError}
    */
-  async persistCart() {
-
+  persistCart() {
+    // this.cart = undefined;
     if (!this.cart) {
       throw new ReferenceError('Cart object doesn\'t exists');
     }
